@@ -1,2 +1,2 @@
-# homeflow
+# homeFlow
 Home management platform
