@@ -1,2 +1,4 @@
-package com.fmi.homeflow.model;public enum Role {
+package com.fmi.homeflow.model;
+public enum Role {
+    MEMBER
 }

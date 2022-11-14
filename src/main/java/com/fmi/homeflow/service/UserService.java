@@ -3,6 +3,8 @@ package com.fmi.homeflow.service;
 import com.fmi.homeflow.exception.UserAlreadyExistsException;
 import com.fmi.homeflow.exception.UserNotFoundException;
 import com.fmi.homeflow.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,6 +14,8 @@ import java.util.Optional;
 @Service
 public class UserService {
     public Map<String, User> database;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserService() {
         database = new HashMap<>();
@@ -22,6 +26,7 @@ public class UserService {
             throw new UserAlreadyExistsException(user.getId());
         }
         else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             database.put(user.getId(), user);
         }
     }
@@ -30,7 +35,7 @@ public class UserService {
         return Optional.of(database.get(id));
     }
 
-    public void updateUser(User user) throws UserNotFoundException{
+    public void updateUser(User user) throws UserNotFoundException {
         if (userExists(user)) {
             database.put(user.getId(), user);
         } else {

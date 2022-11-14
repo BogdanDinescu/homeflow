@@ -6,7 +6,7 @@ public class User {
     private String id;
     private String name;
     private String password;
-    private Collection<Role> roles;
+    private Role role;
 
     public User() {
     }
@@ -39,11 +39,11 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Collection<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
