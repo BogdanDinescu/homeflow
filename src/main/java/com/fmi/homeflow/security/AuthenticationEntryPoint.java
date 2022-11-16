@@ -1,2 +1,4 @@
-package com.fmi.homeflow.security;public class AuthenticationEntryPoint {
+package com.fmi.homeflow.security;
+
+public class AuthenticationEntryPoint {
 }

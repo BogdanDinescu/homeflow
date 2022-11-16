@@ -1,38 +1,42 @@
 package com.fmi.homeflow.service;
 
-import com.fmi.homeflow.exception.UserAlreadyExistsException;
-import com.fmi.homeflow.exception.UserNotFoundException;
+import com.fmi.homeflow.exception.user_exception.UserAlreadyExistsException;
+import com.fmi.homeflow.exception.user_exception.UserNotFoundException;
 import com.fmi.homeflow.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fmi.homeflow.model.dto.UserDto;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class UserService {
-    public Map<String, User> database;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
-    public UserService() {
-        database = new HashMap<>();
-    }
+    private final Map<UUID, User> database;
+    private final PasswordEncoder passwordEncoder;
 
     public void addUser(User user) {
         if (userExists(user)) {
             throw new UserAlreadyExistsException(user.getId());
-        }
-        else {
+        } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             database.put(user.getId(), user);
         }
     }
 
-    public Optional<User> getUserById(String id) {
-        return Optional.of(database.get(id));
+    public UserDto getUserById(UUID id) {
+        User existingUser = database.get(id);
+
+        if (existingUser != null) {
+            return new UserDto(existingUser.getId(), existingUser.getName());
+        }
+
+        throw new UserNotFoundException(id);
     }
 
     public void updateUser(User user) throws UserNotFoundException {
@@ -43,7 +47,7 @@ public class UserService {
         }
     }
 
-    public boolean userExistsById(String id) {
+    public boolean userExistsById(UUID id) {
         return database.containsKey(id);
     }
 
@@ -51,7 +55,7 @@ public class UserService {
         return userExistsById(user.getId());
     }
 
-    public void deleteUserById(String id) {
+    public void deleteUserById(UUID id) {
         database.remove(id);
     }
 

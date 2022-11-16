@@ -1,7 +1,7 @@
-package com.fmi.homeflow;
+package com.fmi.homeflow.configuration;
 
 import com.fmi.homeflow.service.AuthenticationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,12 +12,11 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfiguration {
 
-    @Autowired
-    private AuthenticationService authenticationService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final AuthenticationService authenticationService;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -31,8 +30,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.httpBasic().and()
                 .cors().and().csrf().disable()
-                .authorizeRequests().antMatchers("/api/user").permitAll()
-                .anyRequest().authenticated();
+                .authorizeRequests().anyRequest().permitAll();
 
         http.authenticationProvider(authenticationProvider());
         return http.build();
