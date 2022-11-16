@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.fmi.homeflow.utility.UserConstants.USER_ROUTE;
+
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
@@ -30,7 +32,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.httpBasic().and()
                 .cors().and().csrf().disable()
-                .authorizeRequests().anyRequest().permitAll();
+                .authorizeRequests().antMatchers(USER_ROUTE).permitAll()
+                .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
         return http.build();

@@ -6,5 +6,6 @@ import lombok.experimental.UtilityClass;
 public final class UserConstants {
 
     public static final String GET_USER_ROUTE = "/api/user/";
+    public static final String USER_ROUTE = "/api/user";
 
 }
