@@ -1,7 +1,8 @@
 package com.fmi.homeflow.exception.advice;
 
+import com.fmi.homeflow.exception.InvalidDataException;
+import com.fmi.homeflow.exception.ResourceAlreadyExistsException;
 import com.fmi.homeflow.exception.ResourceNotFoundException;
-import com.fmi.homeflow.exception.user_exception.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,8 +18,15 @@ public class RestExceptionHandler {
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler(value = {UserAlreadyExistsException.class})
-    protected ResponseEntity<Object> handleException(UserAlreadyExistsException exception) {
+    @ExceptionHandler(value = {ResourceAlreadyExistsException.class})
+    protected ResponseEntity<Object> handleException(ResourceAlreadyExistsException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {InvalidDataException.class})
+    protected ResponseEntity<Object> handleException(InvalidDataException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage());

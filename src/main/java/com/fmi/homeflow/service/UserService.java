@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,7 +28,7 @@ public class UserService {
         }
     }
 
-    public UserDto getUserById(UUID id) {
+    public UserDto getUserDtoById(UUID id) {
         User existingUser = database.get(id);
 
         if (existingUser != null) {
@@ -37,6 +36,14 @@ public class UserService {
         }
 
         throw new UserNotFoundException(id);
+    }
+
+    public User getUserById(UUID id) {
+        User existingUser = database.get(id);
+        if (existingUser == null) {
+            throw new UserNotFoundException(id);
+        }
+        return existingUser;
     }
 
     public void updateUser(User user) throws UserNotFoundException {

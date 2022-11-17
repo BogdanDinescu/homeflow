@@ -6,7 +6,6 @@ import com.fmi.homeflow.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -29,6 +28,6 @@ class UserController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<UserDto> getUser(@PathVariable UUID uuid) {
-        return ResponseEntity.ok(userService.getUserById(uuid));
+        return ResponseEntity.ok(userService.getUserDtoById(uuid));
     }
 }
