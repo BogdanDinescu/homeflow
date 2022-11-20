@@ -25,7 +25,7 @@ public class TaskService {
         return UUID.randomUUID();
     }
 
-    public boolean validateTask(Task task) {
+    /*public boolean validateTask(Task task) {
         Family family = familyService.getFamilyById(task.getFamilyId());
         if (task.getAssignee() != null) {
             User user = userService.getUserById(task.getAssignee());
@@ -41,9 +41,9 @@ public class TaskService {
         if (!previousTask.getAssignee().equals(currentTask.getAssignee())) {
             notificationService.notifyUser(currentTask.getAssignee(), currentTask);
         }
-    }
+    }*/
 
-    public void addTask(Task task) {
+    /*public void addTask(Task task) {
         if (task.getTaskId() == null) {
             task.setTaskId(generateUUID());
         }
@@ -55,7 +55,7 @@ public class TaskService {
         if (task.getAssignee() != null) {
             notificationService.notifyUser(task.getAssignee(), task);
         }
-    }
+    }*/
 
     public Task getTaskById(UUID id) {
         Task task = database.get(id);
@@ -73,16 +73,16 @@ public class TaskService {
         return taskExistsById(task.getTaskId());
     }
 
-    public void updateTask(Task task) {
+    /*public void updateTask(Task task) {
         Task previousTask = getTaskById(task.getTaskId());
         if (validateTask(task)) {
             database.put(task.getTaskId(), task);
             notifyIfNeeded(previousTask, task);
         }
         throw new TaskNotFoundException(task.getTaskId());
-    }
+    }*/
 
-    public void patchTask(Task task) {
+    /*public void patchTask(Task task) {
         Task existingTask = getTaskById(task.getTaskId());
         boolean changedAssignee = false;
         if (task.getName() != null) {
@@ -104,7 +104,7 @@ public class TaskService {
                 notificationService.notifyUser(existingTask.getAssignee(), existingTask);
             }
         }
-    }
+    }*/
 
     public boolean deleteTaskById(UUID id) {
         return database.remove(id) != null;

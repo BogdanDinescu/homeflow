@@ -21,7 +21,7 @@ public class FamilyService {
         return UUID.randomUUID();
     }
 
-    public Family createFamily(String name, Set<UUID> members) {
+    /*public Family createFamily(String name, Set<UUID> members) {
         Family family = new Family(generateUUID(), name, members);
         database.put(family.getId(), family);
         return family;
@@ -71,5 +71,5 @@ public class FamilyService {
 
     public boolean deleteFamily(UUID id) {
         return database.remove(id) != null;
-    }
+    }*/
 }

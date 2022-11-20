@@ -16,9 +16,9 @@ import static com.fmi.homeflow.utility.UserConstants.GET_USER_ROUTE;
 @AllArgsConstructor
 public class FamilyController {
 
-    private final FamilyService familyService;
+    //private final FamilyService familyService;
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public ResponseEntity<Family> getFamilyById(@PathVariable UUID id) {
         return ResponseEntity.ok(familyService.getFamilyById(id));
     }
@@ -46,5 +46,5 @@ public class FamilyController {
     public ResponseEntity<Void> deleteFamily(@PathVariable UUID id) {
         familyService.deleteFamily(id);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 }

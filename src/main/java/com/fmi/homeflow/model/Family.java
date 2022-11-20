@@ -1,32 +1,32 @@
 package com.fmi.homeflow.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
+@Entity
+@Table(name = "families", schema = "homeflow_schema")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Family {
 
-    private UUID id;
-    private String name;
-    private Set<UUID> membersList;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    UUID id;
 
-    public void addMember(UUID user) {
-        membersList.add(user);
-    }
+    @Column(name = "nameOfFamily")
+    String name;
 
-    public boolean removeMember(UUID user) {
-        return membersList.remove(user);
-    }
+    @OneToMany(mappedBy = "userFamily")
+    @JsonIgnore
+    Set<User> membersList;
 
-    public boolean hasMember(UUID user) {
-        return membersList.contains(user);
-    }
 }

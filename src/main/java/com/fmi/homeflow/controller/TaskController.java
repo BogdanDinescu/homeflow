@@ -23,7 +23,7 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<Void> addTask(@RequestBody Task task) {
         taskService.addTask(task);
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + task.getTaskId())).build();
@@ -41,7 +41,7 @@ public class TaskController {
         task.setTaskId(id);
         taskService.patchTask(task);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {

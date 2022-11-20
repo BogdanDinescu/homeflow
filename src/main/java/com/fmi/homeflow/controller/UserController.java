@@ -21,13 +21,13 @@ class UserController {
     private final UserService userService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> addUser(@RequestBody User user) {
-        userService.addUser(user);
-        return ResponseEntity.created(URI.create(GET_USER_ROUTE + user.getId())).build();
+    public ResponseEntity<Void> addUser(@RequestBody UserDto user) {
+        User createdUser = userService.addUser(user);
+        return ResponseEntity.created(URI.create(GET_USER_ROUTE + createdUser.getId())).build();
     }
 
-    @GetMapping("/{uuid}")
+    /*@GetMapping("/{uuid}")
     public ResponseEntity<UserDto> getUser(@PathVariable UUID uuid) {
         return ResponseEntity.ok(userService.getUserDtoById(uuid));
-    }
+    }*/
 }
