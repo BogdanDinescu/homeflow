@@ -1,6 +1,7 @@
 package com.fmi.homeflow.controller;
 
 import com.fmi.homeflow.model.User;
+import com.fmi.homeflow.model.dto.UserDetailsDto;
 import com.fmi.homeflow.model.dto.UserDto;
 import com.fmi.homeflow.service.UserService;
 import lombok.AllArgsConstructor;
@@ -22,12 +23,26 @@ class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addUser(@RequestBody UserDto user) {
-        User createdUser = userService.addUser(user);
-        return ResponseEntity.created(URI.create(GET_USER_ROUTE + createdUser.getId())).build();
+        UUID userId = userService.addUser(user);
+        return ResponseEntity.created(URI.create(GET_USER_ROUTE + userId)).build();
     }
 
-    /*@GetMapping("/{uuid}")
-    public ResponseEntity<UserDto> getUser(@PathVariable UUID uuid) {
-        return ResponseEntity.ok(userService.getUserDtoById(uuid));
-    }*/
+    @GetMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDetailsDto> getUser(@PathVariable String username) {
+        return ResponseEntity.ok(userService.getUserByUsername(username));
+    }
+
+    @PutMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDetailsDto> updateUser(
+            @PathVariable String username,
+            @RequestBody UserDetailsDto userDetailsDto
+    ) {
+        return ResponseEntity.ok(userService.updateUser(username, userDetailsDto));
+    }
+
+    @DeleteMapping(value = "/{username}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
+        userService.deleteUser(username);
+        return ResponseEntity.noContent().build();
+    }
 }

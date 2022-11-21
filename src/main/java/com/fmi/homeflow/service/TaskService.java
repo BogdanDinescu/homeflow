@@ -3,26 +3,46 @@ package com.fmi.homeflow.service;
 import com.fmi.homeflow.exception.InvalidDataException;
 import com.fmi.homeflow.exception.user_exception.TaskAlreadyExistsException;
 import com.fmi.homeflow.exception.user_exception.TaskNotFoundException;
-import com.fmi.homeflow.model.Family;
 import com.fmi.homeflow.model.Task;
-import com.fmi.homeflow.model.User;
+import com.fmi.homeflow.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class TaskService {
 
-    private final Map<UUID, Task> database;
-    private final FamilyService familyService;
-    private final UserService userService;
+    private final TaskRepository taskRepository;
     private final NotificationService notificationService;
 
-    private synchronized UUID generateUUID() {
-        return UUID.randomUUID();
+    public Task getTaskById(UUID id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+    }
+
+    public void deleteTaskById(UUID id) {
+        taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+        taskRepository.deleteById(id);
+    }
+
+    public void addTask(Task task) {
+        Optional<Task> optionalTask = taskRepository.findById(task.getTaskId());
+        if (optionalTask.isPresent()) {
+            throw new TaskAlreadyExistsException(task.getTaskId());
+        }
+
+        //TODO:Explain what validate has to check @Bogdan
+        //validateTask(task);
+
+        Task savedTask = taskRepository.save(task);
+
+        if (savedTask.getAssignee() != null) {
+            notificationService.notifyUser(task.getAssignee().getId(), task);
+        }
     }
 
     /*public boolean validateTask(Task task) {
@@ -35,45 +55,15 @@ public class TaskService {
             }
         }
         return true;
-    }
+    }*/
 
-    public void notifyIfNeeded(Task previousTask, Task currentTask) {
+    /*public void notifyIfNeeded(Task previousTask, Task currentTask) {
         if (!previousTask.getAssignee().equals(currentTask.getAssignee())) {
             notificationService.notifyUser(currentTask.getAssignee(), currentTask);
         }
-    }*/
-
-    /*public void addTask(Task task) {
-        if (task.getTaskId() == null) {
-            task.setTaskId(generateUUID());
-        }
-        if (database.containsKey(task.getTaskId())) {
-            throw new TaskAlreadyExistsException(task.getTaskId());
-        }
-        validateTask(task);
-        database.put(task.getTaskId(), task);
-        if (task.getAssignee() != null) {
-            notificationService.notifyUser(task.getAssignee(), task);
-        }
-    }*/
-
-    public Task getTaskById(UUID id) {
-        Task task = database.get(id);
-        if (task == null) {
-            throw new TaskNotFoundException(id);
-        }
-        return task;
     }
 
-    public boolean taskExistsById(UUID id) {
-        return database.containsKey(id);
-    }
-
-    public boolean taskExists(Task task) {
-        return taskExistsById(task.getTaskId());
-    }
-
-    /*public void updateTask(Task task) {
+    public void updateTask(Task task) {
         Task previousTask = getTaskById(task.getTaskId());
         if (validateTask(task)) {
             database.put(task.getTaskId(), task);
@@ -105,12 +95,4 @@ public class TaskService {
             }
         }
     }*/
-
-    public boolean deleteTaskById(UUID id) {
-        return database.remove(id) != null;
-    }
-
-    public boolean deleteTask(Task task) {
-        return deleteTaskById(task.getTaskId());
-    }
 }

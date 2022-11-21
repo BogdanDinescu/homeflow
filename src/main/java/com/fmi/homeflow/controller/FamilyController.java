@@ -16,7 +16,7 @@ import static com.fmi.homeflow.utility.UserConstants.GET_USER_ROUTE;
 @AllArgsConstructor
 public class FamilyController {
 
-    //private final FamilyService familyService;
+    private final FamilyService familyService;
 
     /*@GetMapping("/{id}")
     public ResponseEntity<Family> getFamilyById(@PathVariable UUID id) {

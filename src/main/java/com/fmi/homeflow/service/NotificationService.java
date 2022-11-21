@@ -11,7 +11,7 @@ import java.util.UUID;
 public class NotificationService {
 
     public void notifyUser(UUID userId, Task task) {
-        // TODO THIS IS A STUB METHOD
+        // TODO THIS IS A STUB METHOD :CommentsInCodeEqualsPoop: ;)
         return;
     }
 }

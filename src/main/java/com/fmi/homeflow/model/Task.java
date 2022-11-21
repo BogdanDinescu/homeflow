@@ -19,21 +19,23 @@ public class Task {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
-    UUID taskId;
+    private UUID taskId;
 
     @Column(name = "name")
-    String name;
+    private String name;
 
     @Column(name = "state")
     @Enumerated(value = EnumType.STRING)
-    State state;
+    private State state;
 
-    @Column(name = "familyId")
-    UUID familyId;
+    @ManyToOne()
+    @JoinColumn(name = "family_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Family family;
 
     @ManyToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
-    User assignee;
+    private User assignee;
 
 }

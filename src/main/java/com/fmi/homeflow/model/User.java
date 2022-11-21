@@ -15,31 +15,38 @@ import java.util.UUID;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
-    UUID id;
+    private UUID id;
 
     @Column(name = "username")
-    String name;
+    private String username;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name = "password")
-    String password;
+    private String password;
 
     @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
-    Role role;
+    private Role role;
 
     @ManyToOne()
     @JoinColumn(name = "family_id", referencedColumnName = "id")
     @JsonIgnore
-    Family userFamily;
+    private Family userFamily;
 
     @OneToMany(mappedBy = "assignee")
     @JsonIgnore
-    Set<Task> tasks;
+    private Set<Task> tasks;
 
 }

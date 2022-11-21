@@ -23,13 +23,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
-    /*@PostMapping
+    @PostMapping
     public ResponseEntity<Void> addTask(@RequestBody Task task) {
         taskService.addTask(task);
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + task.getTaskId())).build();
     }
 
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(@PathVariable UUID id, @RequestBody Task task) {
         task.setTaskId(id);
         taskService.updateTask(task);

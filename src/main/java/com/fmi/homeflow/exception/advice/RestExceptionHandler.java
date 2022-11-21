@@ -32,4 +32,11 @@ public class RestExceptionHandler {
                 .body(exception.getMessage());
     }
 
+    @ExceptionHandler(value = {Exception.class})
+    protected ResponseEntity<Object> handleException(Exception exception) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Internal server error!\n" + exception.getMessage());
+    }
+
 }

@@ -3,6 +3,7 @@ package com.fmi.homeflow.service;
 import com.fmi.homeflow.exception.user_exception.FamilyNotFoundException;
 import com.fmi.homeflow.exception.user_exception.UserNotFoundException;
 import com.fmi.homeflow.model.Family;
+import com.fmi.homeflow.repository.FamilyRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +15,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FamilyService {
 
-    private final Map<UUID, Family> database;
+    private final FamilyRepository familyRepository;
     private final UserService userService;
-
-    private synchronized UUID generateUUID() {
-        return UUID.randomUUID();
-    }
 
     /*public Family createFamily(String name, Set<UUID> members) {
         Family family = new Family(generateUUID(), name, members);
-        database.put(family.getId(), family);
+        database.put(family.getId(), family);      //   Family savedFamily = familyRepository.save(family);
         return family;
     }
 

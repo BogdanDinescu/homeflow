@@ -20,13 +20,13 @@ public class Family {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
-    UUID id;
+    private UUID id;
 
-    @Column(name = "nameOfFamily")
-    String name;
+    @Column(name = "name_of_family")
+    private String name;
 
     @OneToMany(mappedBy = "userFamily")
     @JsonIgnore
-    Set<User> membersList;
+    private Set<User> membersList;
 
 }
