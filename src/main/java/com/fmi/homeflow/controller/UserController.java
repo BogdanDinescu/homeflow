@@ -31,8 +31,8 @@ class UserController {
         return ResponseEntity.ok(userService.getUserDtoByUsername(username));
     }
 
-    @PutMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("principal.username == username")
+    @PutMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDetailsDto> updateUser(
             @PathVariable String username,
             @RequestBody UserDetailsDto userDetailsDto

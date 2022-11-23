@@ -31,6 +31,7 @@ public class TaskController {
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + task.getId())).build();
     }
 
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #task.getFamilyId())")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(@PathVariable UUID id, @RequestBody Task task) {
         task.setId(id);
@@ -38,6 +39,7 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #task.getFamilyId())")
     @PatchMapping("/{id}")
     public ResponseEntity<Void> patchTask(@PathVariable UUID id, @RequestBody Task task) {
         task.setId(id);
@@ -45,6 +47,7 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #task.getFamilyId())")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
         taskService.deleteTaskById(id);

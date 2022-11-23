@@ -4,6 +4,7 @@ import com.fmi.homeflow.model.Family;
 import com.fmi.homeflow.service.FamilyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -18,6 +19,7 @@ public class FamilyController {
 
     private final FamilyService familyService;
 
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #id)")
     @GetMapping("/{id}")
     public ResponseEntity<Family> getFamilyById(@PathVariable UUID id) {
         return ResponseEntity.ok(familyService.getFamilyById(id));
@@ -29,12 +31,15 @@ public class FamilyController {
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + serviceFamily.getId())).build();
     }
 
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #familyId)")
     @PutMapping("/add/{familyId}/{username}")
     public ResponseEntity<Void> addToFamily(@PathVariable UUID familyId, @PathVariable String username) {
         familyService.addMemberToFamily(username, familyId);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #familyId) and @familyService.memberIsInFamily(#username, #familyId)")
+    @PutMapping("/delete/{familyId}/{username}")
     @DeleteMapping("/delete/{familyId}/{username}")
     public ResponseEntity<Void> removeFromFamily(@PathVariable UUID familyId, @PathVariable String username) {
         familyService.removeMemberFromFamily(username, familyId);
@@ -42,6 +47,7 @@ public class FamilyController {
     }
 
 
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #id)")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFamily(@PathVariable UUID id) {
         familyService.deleteFamily(id);
