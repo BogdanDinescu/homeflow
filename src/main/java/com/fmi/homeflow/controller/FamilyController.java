@@ -39,7 +39,6 @@ public class FamilyController {
     }
 
     @PreAuthorize("@familyService.memberIsInFamily(principal.username, #familyId) and @familyService.memberIsInFamily(#username, #familyId)")
-    @PutMapping("/delete/{familyId}/{username}")
     @DeleteMapping("/delete/{familyId}/{username}")
     public ResponseEntity<Void> removeFromFamily(@PathVariable UUID familyId, @PathVariable String username) {
         familyService.removeMemberFromFamily(username, familyId);
