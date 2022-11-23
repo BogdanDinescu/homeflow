@@ -5,7 +5,7 @@ import com.fmi.homeflow.exception.ResourceAlreadyExistsException;
 import java.util.UUID;
 
 public class UserAlreadyExistsException extends ResourceAlreadyExistsException {
-    public <T> UserAlreadyExistsException(T criteria) {
-        super("User by criteria " + criteria.toString() + " already exists!");
+    public UserAlreadyExistsException(String name) {
+        super("User with username " + name + " already exists!");
     }
 }

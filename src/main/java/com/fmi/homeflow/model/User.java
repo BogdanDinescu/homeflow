@@ -19,11 +19,6 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
-
     @Column(name = "username")
     private String username;
 
@@ -45,7 +40,7 @@ public class User {
     @JsonIgnore
     private Family userFamily;
 
-    @OneToMany(mappedBy = "assignee")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assignee")
     @JsonIgnore
     private Set<Task> tasks;
 

@@ -1,13 +1,13 @@
 package com.fmi.homeflow.service;
 
 import com.fmi.homeflow.exception.user_exception.FamilyNotFoundException;
-import com.fmi.homeflow.exception.user_exception.UserNotFoundException;
 import com.fmi.homeflow.model.Family;
+import com.fmi.homeflow.model.User;
 import com.fmi.homeflow.repository.FamilyRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,14 +18,13 @@ public class FamilyService {
     private final FamilyRepository familyRepository;
     private final UserService userService;
 
-    /*public Family createFamily(String name, Set<UUID> members) {
-        Family family = new Family(generateUUID(), name, members);
-        database.put(family.getId(), family);      //   Family savedFamily = familyRepository.save(family);
-        return family;
+    public Family createFamily(String name, Set<User> members) {
+        Family family = Family.builder().name(name).membersList(members).build();
+        return familyRepository.save(family);
     }
 
     public boolean familyExistsById(UUID id) {
-        return database.containsKey(id);
+        return familyRepository.existsById(id);
     }
 
     public boolean familyExists(Family family) {
@@ -33,40 +32,39 @@ public class FamilyService {
     }
 
     public Family getFamilyById(UUID id) {
-        if (familyExistsById(id)) {
-            return database.get(id);
+        Optional<Family> familyOptional = familyRepository.findById(id);
+        if (familyOptional.isEmpty()) {
+            throw new FamilyNotFoundException(id);
         }
-        throw new FamilyNotFoundException(id);
+        return familyOptional.get();
     }
 
 
-    public void addMemberToFamily(UUID userId, UUID familyId) {
-        if (!userService.userExistsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
+    public void addMemberToFamily(String username, UUID familyId) {
+        User user = userService.getUserByUsername(username);
         Family family = getFamilyById(familyId);
-        family.addMember(userId);
-        database.put(familyId, family);
+        user.setUserFamily(family);
+        userService.upsertUser(user);
     }
 
-    public void removeMemberFromFamily(UUID userId, UUID familyId) {
-        if (!userService.userExistsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
+    public void removeMemberFromFamily(String username, UUID familyId) {
+        User user = userService.getUserByUsername(username);
         Family family = getFamilyById(familyId);
-        family.removeMember(familyId);
-        database.put(familyId, family);
+        user.setUserFamily(null);
+        userService.upsertUser(user);
     }
 
-    public boolean memberIsInFamily(UUID userId, UUID familyId) {
-        if (!userService.userExistsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
-        Family family = getFamilyById(familyId);
-        return family.hasMember(userId);
+    public boolean memberIsInFamily(User user, UUID familyId) {
+        User user1 = userService.getUserByUsername(user.getUsername());
+        return user1.getUserFamily().getId().equals(familyId);
     }
 
-    public boolean deleteFamily(UUID id) {
-        return database.remove(id) != null;
-    }*/
+    public boolean memberIsInFamily(String username, UUID familyId) {
+        User user = userService.getUserByUsername(username);
+        return user.getUserFamily().getId().equals(familyId);
+    }
+
+    public void deleteFamily(UUID id) {
+        familyRepository.deleteById(id);
+    }
 }

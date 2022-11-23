@@ -4,6 +4,7 @@ import com.fmi.homeflow.model.Task;
 import com.fmi.homeflow.service.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,13 +24,14 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #task.getFamilyId())")
     @PostMapping
     public ResponseEntity<Void> addTask(@RequestBody Task task) {
         taskService.addTask(task);
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + task.getTaskId())).build();
     }
 
-    /*@PutMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(@PathVariable UUID id, @RequestBody Task task) {
         task.setTaskId(id);
         taskService.updateTask(task);
@@ -41,7 +43,7 @@ public class TaskController {
         task.setTaskId(id);
         taskService.patchTask(task);
         return ResponseEntity.noContent().build();
-    }*/
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {

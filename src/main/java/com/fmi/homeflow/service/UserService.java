@@ -1,5 +1,6 @@
 package com.fmi.homeflow.service;
 
+import com.fmi.homeflow.exception.user_exception.UserAlreadyExistsException;
 import com.fmi.homeflow.exception.user_exception.UserNotFoundException;
 import com.fmi.homeflow.model.Role;
 import com.fmi.homeflow.model.User;
@@ -10,8 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -19,20 +18,27 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UUID addUser(UserDto userDto) {
+    public String addUser(UserDto userDto) {
+        if (userRepository.existsById(userDto.getName())) {
+            throw new UserAlreadyExistsException(userDto.getName());
+        }
         return userRepository.save(User.builder()
                         .username(userDto.getName())
                         .password(passwordEncoder.encode(userDto.getPassword()))
                         .role(Role.MEMBER)
-                        .build())
-                .getId();
+                        .build()).getUsername();
     }
 
-    public UserDetailsDto getUserByUsername(String username) {
+    public UserDetailsDto getUserDtoByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(user -> UserDetailsDto.builder()
                         .name(user.getUsername())
                         .build())
+                .orElseThrow(() -> new UserNotFoundException(username));
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
     }
 
@@ -50,9 +56,17 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(username));
     }
 
+    public User upsertUser(User user) {
+        return userRepository.save(user);
+    }
+
     public void deleteUser(String username) {
         userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
         userRepository.deleteByUsername(username);
+    }
+
+    public boolean userExistsByUserName(String username) {
+        return userRepository.existsById(username);
     }
 }
