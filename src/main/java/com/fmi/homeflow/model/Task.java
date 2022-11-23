@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tasks", schema = "homeflow_schema")
+@Table(name = "tasks")
 @Getter
 @Setter
 @AllArgsConstructor

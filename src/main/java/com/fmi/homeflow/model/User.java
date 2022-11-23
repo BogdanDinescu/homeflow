@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users", schema = "homeflow_schema")
+@Table(name = "users")
 @Getter
 @Setter
 @EqualsAndHashCode
