@@ -19,9 +19,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public String addUser(UserDto userDto) {
-        if (userRepository.existsById(userDto.getName())) {
-            throw new UserAlreadyExistsException(userDto.getName());
-        }
         return userRepository.save(User.builder()
                         .username(userDto.getName())
                         .password(passwordEncoder.encode(userDto.getPassword()))
@@ -66,7 +63,4 @@ public class UserService {
         userRepository.deleteByUsername(username);
     }
 
-    public boolean userExistsByUserName(String username) {
-        return userRepository.existsById(username);
-    }
 }

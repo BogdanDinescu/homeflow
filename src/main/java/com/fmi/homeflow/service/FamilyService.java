@@ -49,7 +49,6 @@ public class FamilyService {
 
     public void removeMemberFromFamily(String username, UUID familyId) {
         User user = userService.getUserByUsername(username);
-        Family family = getFamilyById(familyId);
         user.setUserFamily(null);
         userService.upsertUser(user);
     }

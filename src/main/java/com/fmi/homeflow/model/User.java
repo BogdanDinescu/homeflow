@@ -19,7 +19,12 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @Column(name = "username")
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
+
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "first_name")
