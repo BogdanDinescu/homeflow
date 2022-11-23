@@ -24,7 +24,7 @@ public class User {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "first_name")
@@ -45,7 +45,7 @@ public class User {
     @JsonIgnore
     private Family userFamily;
 
-    @OneToMany(mappedBy = "assignee")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assignee")
     @JsonIgnore
     private Set<Task> tasks;
 

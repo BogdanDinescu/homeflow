@@ -18,7 +18,7 @@ public class FamilyController {
 
     private final FamilyService familyService;
 
-    /*@GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Family> getFamilyById(@PathVariable UUID id) {
         return ResponseEntity.ok(familyService.getFamilyById(id));
     }
@@ -29,15 +29,15 @@ public class FamilyController {
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + serviceFamily.getId())).build();
     }
 
-    @PutMapping("/add/{familyId}/{userId}")
-    public ResponseEntity<Void> addToFamily(@PathVariable UUID familyId, @PathVariable UUID userId) {
-        familyService.addMemberToFamily(userId, familyId);
+    @PutMapping("/add/{familyId}/{username}")
+    public ResponseEntity<Void> addToFamily(@PathVariable UUID familyId, @PathVariable String username) {
+        familyService.addMemberToFamily(username, familyId);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/delete/{familyId}/{userId}")
-    public ResponseEntity<Void> removeFromFamily(@PathVariable UUID familyId, @PathVariable UUID userId) {
-        familyService.removeMemberFromFamily(userId, familyId);
+    @PutMapping("/delete/{familyId}/{username}")
+    public ResponseEntity<Void> removeFromFamily(@PathVariable UUID familyId, @PathVariable String username) {
+        familyService.removeMemberFromFamily(username, familyId);
         return ResponseEntity.noContent().build();
     }
 
@@ -46,5 +46,5 @@ public class FamilyController {
     public ResponseEntity<Void> deleteFamily(@PathVariable UUID id) {
         familyService.deleteFamily(id);
         return ResponseEntity.noContent().build();
-    }*/
+    }
 }

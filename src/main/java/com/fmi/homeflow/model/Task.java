@@ -13,6 +13,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Task {
 
     @Id
@@ -34,8 +35,13 @@ public class Task {
     private Family family;
 
     @ManyToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "username")
     @JsonIgnore
     private User assignee;
+
+    @Transient
+    private UUID familyId;
+    @Transient
+    private String assigneeName;
 
 }

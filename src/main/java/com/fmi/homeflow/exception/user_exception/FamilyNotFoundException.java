@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public class FamilyNotFoundException extends ResourceNotFoundException {
 
-    public FamilyNotFoundException(String nameOfFamily) {
-        super("Family " + nameOfFamily + " was not found!");
+    public FamilyNotFoundException(UUID id) {
+        super("Family with " + id + " was not found!");
     }
 
 }
