@@ -31,7 +31,7 @@ class UserController {
         return ResponseEntity.ok(userService.getUserDtoByUsername(username));
     }
 
-    @PreAuthorize("principal.username == username")
+    @PreAuthorize("principal.username == #username")
     @PutMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDetailsDto> updateUser(
             @PathVariable String username,
@@ -40,8 +40,8 @@ class UserController {
         return ResponseEntity.ok(userService.updateUser(username, userDetailsDto));
     }
 
+    @PreAuthorize("principal.username == #username")
     @DeleteMapping(value = "/delete/{username}")
-    @PreAuthorize("principal.username == username")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
