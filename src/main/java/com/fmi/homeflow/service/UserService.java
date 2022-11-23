@@ -19,19 +19,15 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public String addUser(UserDto userDto) {
+        if (userRepository.existsByUsername(userDto.getName())) {
+            throw new UserAlreadyExistsException(userDto.getName());
+        }
+
         return userRepository.save(User.builder()
                         .username(userDto.getName())
                         .password(passwordEncoder.encode(userDto.getPassword()))
                         .role(Role.MEMBER)
                         .build()).getUsername();
-    }
-
-    public UserDetailsDto getUserDtoByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .map(user -> UserDetailsDto.builder()
-                        .name(user.getUsername())
-                        .build())
-                .orElseThrow(() -> new UserNotFoundException(username));
     }
 
     public User getUserByUsername(String username) {
@@ -43,17 +39,21 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .map(optionalUser -> {
                     optionalUser.setUsername(userDetailsDto.getName());
+                    optionalUser.setFirstName(userDetailsDto.getFirstName());
+                    optionalUser.setLastName(userDetailsDto.getLastName());
                     return optionalUser;
                 })
                 .map(userRepository::save)
                 .map(savedUser -> UserDetailsDto.builder()
                         .name(savedUser.getUsername())
+                        .firstName(savedUser.getFirstName())
+                        .lastName(savedUser.getLastName())
                         .build()
                 )
                 .orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public User upsertUser(User user) {
+    public User updateUser(User user) {
         return userRepository.save(user);
     }
 

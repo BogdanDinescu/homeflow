@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public class UserAlreadyExistsException extends ResourceAlreadyExistsException {
     public UserAlreadyExistsException(String name) {
-        super("User with username " + name + " already exists!");
+        super("User with username \"" + name + "\" already exists!");
     }
 }

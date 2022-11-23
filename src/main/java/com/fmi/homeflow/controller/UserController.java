@@ -2,7 +2,7 @@ package com.fmi.homeflow.controller;
 
 import com.fmi.homeflow.model.dto.UserDetailsDto;
 import com.fmi.homeflow.model.dto.UserDto;
-import com.fmi.homeflow.service.UserService;
+import com.fmi.homeflow.service.UserFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +18,17 @@ import static com.fmi.homeflow.utility.UserConstants.GET_USER_ROUTE;
 @AllArgsConstructor
 class UserController {
 
-    private final UserService userService;
+    private final UserFacade userFacade;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addUser(@RequestBody UserDto user) {
-        String username = userService.addUser(user);
+        String username = userFacade.addUser(user);
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + username)).build();
     }
 
     @GetMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDetailsDto> getUser(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserDtoByUsername(username));
+        return ResponseEntity.ok(userFacade.getUserByUsername(username));
     }
 
     @PreAuthorize("principal.username == #username")
@@ -37,13 +37,13 @@ class UserController {
             @PathVariable String username,
             @RequestBody UserDetailsDto userDetailsDto
     ) {
-        return ResponseEntity.ok(userService.updateUser(username, userDetailsDto));
+        return ResponseEntity.ok(userFacade.updateUser(username, userDetailsDto));
     }
 
     @PreAuthorize("principal.username == #username")
     @DeleteMapping(value = "/delete/{username}")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
-        userService.deleteUser(username);
+        userFacade.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 }
