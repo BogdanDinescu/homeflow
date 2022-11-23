@@ -1,8 +1,6 @@
 package com.fmi.homeflow.service;
 
 import com.fmi.homeflow.exception.InvalidDataException;
-import com.fmi.homeflow.exception.user_exception.FamilyNotFoundException;
-import com.fmi.homeflow.exception.user_exception.TaskAlreadyExistsException;
 import com.fmi.homeflow.exception.user_exception.TaskNotFoundException;
 import com.fmi.homeflow.model.Family;
 import com.fmi.homeflow.model.Task;
@@ -11,7 +9,6 @@ import com.fmi.homeflow.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -82,16 +79,16 @@ public class TaskService {
     }
 
     public void updateTask(Task task) {
-        Task previousTask = getTaskById(task.getTaskId());
+        Task previousTask = getTaskById(task.getId());
         if (validateTask(task)) {
             taskRepository.save(task);
             notifyIfNeeded(previousTask, task);
         }
-        throw new TaskNotFoundException(task.getTaskId());
+        throw new TaskNotFoundException(task.getId());
     }
 
     public void patchTask(Task task) {
-        Task existingTask = getTaskById(task.getTaskId());
+        Task existingTask = getTaskById(task.getId());
         boolean changedAssignee = false;
         if (task.getName() != null) {
             existingTask.setName(task.getName());

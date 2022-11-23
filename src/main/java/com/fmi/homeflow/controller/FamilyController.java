@@ -35,7 +35,7 @@ public class FamilyController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/delete/{familyId}/{username}")
+    @DeleteMapping("/delete/{familyId}/{username}")
     public ResponseEntity<Void> removeFromFamily(@PathVariable UUID familyId, @PathVariable String username) {
         familyService.removeMemberFromFamily(username, familyId);
         return ResponseEntity.noContent().build();

@@ -45,7 +45,7 @@ public class User {
     @JsonIgnore
     private Family userFamily;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "assignee")
+    @OneToMany(mappedBy = "assignee")
     @JsonIgnore
     private Set<Task> tasks;
 

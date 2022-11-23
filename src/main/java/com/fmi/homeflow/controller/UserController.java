@@ -40,7 +40,7 @@ class UserController {
         return ResponseEntity.ok(userService.updateUser(username, userDetailsDto));
     }
 
-    @DeleteMapping(value = "/{username}")
+    @DeleteMapping(value = "/delete/{username}")
     @PreAuthorize("principal.username == username")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
         userService.deleteUser(username);

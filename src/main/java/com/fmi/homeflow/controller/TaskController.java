@@ -28,19 +28,19 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<Void> addTask(@RequestBody Task task) {
         taskService.addTask(task);
-        return ResponseEntity.created(URI.create(GET_USER_ROUTE + task.getTaskId())).build();
+        return ResponseEntity.created(URI.create(GET_USER_ROUTE + task.getId())).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(@PathVariable UUID id, @RequestBody Task task) {
-        task.setTaskId(id);
+        task.setId(id);
         taskService.updateTask(task);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> patchTask(@PathVariable UUID id, @RequestBody Task task) {
-        task.setTaskId(id);
+        task.setId(id);
         taskService.patchTask(task);
         return ResponseEntity.noContent().build();
     }

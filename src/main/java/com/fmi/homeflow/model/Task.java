@@ -20,7 +20,7 @@ public class Task {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
-    private UUID taskId;
+    private UUID id;
 
     @Column(name = "name")
     private String name;
@@ -41,6 +41,7 @@ public class Task {
 
     @Transient
     private UUID familyId;
+
     @Transient
     private String assigneeName;
 
