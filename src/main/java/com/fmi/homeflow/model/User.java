@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,6 +34,14 @@ public class User {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "email")
+    @Email
+    private String email;
+
+    @Column(name = "phone")
+    @Pattern(regexp = "^\\d{10}$")
+    private String phone;
 
     @Column(name = "password")
     private String password;
