@@ -26,5 +26,9 @@ public class UserDetailsDto {
     @NotBlank
     private String lastName;
 
+    private String email;
+
+    private String phone;
+
 }
 

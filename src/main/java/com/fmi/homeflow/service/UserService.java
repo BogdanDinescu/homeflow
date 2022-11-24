@@ -41,6 +41,8 @@ public class UserService {
                     optionalUser.setUsername(userDetailsDto.getName());
                     optionalUser.setFirstName(userDetailsDto.getFirstName());
                     optionalUser.setLastName(userDetailsDto.getLastName());
+                    optionalUser.setEmail(userDetailsDto.getEmail());
+                    optionalUser.setPhone(userDetailsDto.getPhone());
                     return optionalUser;
                 })
                 .map(userRepository::save)

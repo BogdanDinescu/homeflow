@@ -6,28 +6,32 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 
+import javax.mail.*;
+import javax.mail.internet.MimeMessage;
 import java.util.Optional;
+import java.util.Properties;
 
 public class EmailNotifier implements Observer {
 
-    private final MailSender mailSender;
-    private final SimpleMailMessage templateMessage;
+    Session session;
     private static final String TITLE = "HomeFlow";
-    private static final String FROM_MAIL = "";
+    private static final String FROM_MAIL = "7fivwlats@relay.firefox.com";
 
     public EmailNotifier() {
-        templateMessage = new SimpleMailMessage();
-        templateMessage.setSubject(TITLE);
-        templateMessage.setFrom(FROM_MAIL);
-
-        JavaMailSenderImpl javaMail = new JavaMailSenderImpl();
-        javaMail.setHost("smtp-relay.sendinblue.com");
-        javaMail.setPort(587);
-        javaMail.setUsername("7fivwlats@relay.firefox.com");
-        javaMail.setPassword("NKs8Mc1DQ52OyEUT");
-
-        mailSender = javaMail;
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp-relay.sendinblue.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        Authenticator auth = new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(FROM_MAIL, "NKs8Mc1DQ52OyEUT");
+            }
+        };
+        session = Session.getInstance(props, auth);
     }
 
     @Override
@@ -44,12 +48,19 @@ public class EmailNotifier implements Observer {
         }
         String message = messageOptional.get();
 
-        SimpleMailMessage msg = new SimpleMailMessage(templateMessage);
-        msg.setTo(emailTo);
-        msg.setText(message);
         try {
-            mailSender.send(msg);
-        } catch (MailException e) {
+            MimeMessage msg = new MimeMessage(session);
+            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+            msg.addHeader("format", "flowed");
+            msg.addHeader("Content-Transfer-Encoding", "8bit");
+            msg.setFrom(FROM_MAIL);
+            msg.setSubject(TITLE, "UTF-8");
+            msg.setText(message, "UTF-8");
+            msg.setRecipients(Message.RecipientType.TO, emailTo);
+
+            Transport.send(msg);
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }

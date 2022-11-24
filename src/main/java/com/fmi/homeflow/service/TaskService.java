@@ -17,6 +17,7 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final FamilyService familyService;
+    private final UserService userService;
     private final NotificationService notificationService;
 
     public Task getTaskById(UUID id) {
@@ -32,6 +33,10 @@ public class TaskService {
 
     public void addTask(Task task) {
         Family family = familyService.getFamilyById(task.getFamilyId());
+        if (task.getAssigneeName() != null) {
+            User user = userService.getUserByUsername(task.getAssigneeName());
+            task.setAssignee(user);
+        }
         task.setFamily(family);
         if (validateTask(task)) {
             Task savedTask = taskRepository.save(task);
