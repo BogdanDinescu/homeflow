@@ -6,6 +6,8 @@ import com.fmi.homeflow.model.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+
 @Service
 @AllArgsConstructor
 public final class UserFacade {
@@ -21,8 +23,9 @@ public final class UserFacade {
                 .build();
     }
 
-    public String addUser(UserDto user) {
-        return userService.addUser(user);
+    public URI addUser(UserDto user) {
+        User newUser = userService.addUser(user);
+        return userService.createUserURI(newUser);
     }
 
     public UserDetailsDto updateUser(String username, UserDetailsDto userDetailsDto) {

@@ -22,8 +22,7 @@ class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addUser(@RequestBody UserDto user) {
-        String username = userFacade.addUser(user);
-        return ResponseEntity.created(URI.create(GET_USER_ROUTE + username)).build();
+        return ResponseEntity.created(userFacade.addUser(user)).build();
     }
 
     @GetMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)

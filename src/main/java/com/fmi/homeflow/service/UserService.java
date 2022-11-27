@@ -11,6 +11,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+
+import static com.fmi.homeflow.utility.UserConstants.GET_USER_ROUTE;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -18,7 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public String addUser(UserDto userDto) {
+    public User addUser(UserDto userDto) {
         if (userRepository.existsByUsername(userDto.getName())) {
             throw new UserAlreadyExistsException(userDto.getName());
         }
@@ -27,7 +31,11 @@ public class UserService {
                         .username(userDto.getName())
                         .password(passwordEncoder.encode(userDto.getPassword()))
                         .role(Role.MEMBER)
-                        .build()).getUsername();
+                        .build());
+    }
+
+    public URI createUserURI(User user) {
+        return URI.create(GET_USER_ROUTE + user.getUsername());
     }
 
     public User getUserByUsername(String username) {
