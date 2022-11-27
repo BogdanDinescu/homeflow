@@ -52,9 +52,10 @@ public class TaskService {
      *     <li>The task is present in a family (a task is created within a family)</li>
      *     <li>If the task is assigned to someone, verify that the that user is a member of that family</li>
      * </ul>
-     * @param task - the task to validate
+     * @param task the task to validate
      * @return <ul><li>true if it's valid</li>
      *         <li>false if it's not</li></ul>
+     * @throws InvalidDataException if the task has no family assigned.
      *
      */
     public boolean validateTask(Task task) {
@@ -74,8 +75,8 @@ public class TaskService {
 
     /**
      * Calls the notification service if the task have the assignee changed
-     * @param previousTask - previous task
-     * @param currentTask - the task to be saved
+     * @param previousTask previous task
+     * @param currentTask the task to be saved
      */
     public void notifyIfNeeded(Task previousTask, Task currentTask) {
         if (!previousTask.getAssignee().equals(currentTask.getAssignee())) {
