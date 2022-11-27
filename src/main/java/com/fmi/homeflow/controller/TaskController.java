@@ -1,7 +1,8 @@
 package com.fmi.homeflow.controller;
 
 import com.fmi.homeflow.model.Task;
-import com.fmi.homeflow.service.TaskService;
+import com.fmi.homeflow.model.dto.TaskDto;
+import com.fmi.homeflow.service.TaskFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,40 +18,40 @@ import static com.fmi.homeflow.utility.UserConstants.GET_USER_ROUTE;
 @AllArgsConstructor
 public class TaskController {
 
-    private final TaskService taskService;
+    private final TaskFacade taskFacade;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable UUID id) {
-        return ResponseEntity.ok(taskService.getTaskById(id));
+    public ResponseEntity<TaskDto> getTaskById(@PathVariable UUID id) {
+        return ResponseEntity.ok(taskFacade.getTaskById(id));
     }
 
     @PreAuthorize("@familyService.memberIsInFamily(principal.username, #task.getFamilyId())")
     @PostMapping
-    public ResponseEntity<Void> addTask(@RequestBody Task task) {
-        taskService.addTask(task);
+    public ResponseEntity<Void> addTask(@RequestBody TaskDto task) {
+        taskFacade.addTask(task);
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + task.getId())).build();
     }
 
     @PreAuthorize("@familyService.memberIsInFamily(principal.username, #task.getFamilyId())")
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateTask(@PathVariable UUID id, @RequestBody Task task) {
+    public ResponseEntity<Void> updateTask(@PathVariable UUID id, @RequestBody TaskDto task) {
         task.setId(id);
-        taskService.updateTask(task);
+        taskFacade.updateTask(task);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #task.getFamilyId())")
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, @taskService.getTaskById(#id))")
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> patchTask(@PathVariable UUID id, @RequestBody Task task) {
+    public ResponseEntity<Void> patchTask(@PathVariable UUID id, @RequestBody TaskDto task) {
         task.setId(id);
-        taskService.patchTask(task);
+        taskFacade.patchTask(task);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #task.getFamilyId())")
+    @PreAuthorize("@familyService.memberIsInFamily(principal.username, #id)")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
-        taskService.deleteTaskById(id);
+        taskFacade.deleteTaskById(id);
         return ResponseEntity.noContent().build();
     }
 

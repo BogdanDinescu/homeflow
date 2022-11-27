@@ -25,7 +25,7 @@ public class Task {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "state")
+    @Column(name = "state", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private State state;
 
@@ -38,11 +38,5 @@ public class Task {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
     private User assignee;
-
-    @Transient
-    private UUID familyId;
-
-    @Transient
-    private String assigneeName;
 
 }

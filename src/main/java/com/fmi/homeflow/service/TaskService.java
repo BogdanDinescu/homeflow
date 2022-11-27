@@ -17,7 +17,6 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final FamilyService familyService;
-    private final UserService userService;
     private final NotificationService notificationService;
 
     public Task getTaskById(UUID id) {
@@ -32,12 +31,6 @@ public class TaskService {
     }
 
     public void addTask(Task task) {
-        Family family = familyService.getFamilyById(task.getFamilyId());
-        if (task.getAssigneeName() != null) {
-            User user = userService.getUserByUsername(task.getAssigneeName());
-            task.setAssignee(user);
-        }
-        task.setFamily(family);
         if (validateTask(task)) {
             Task savedTask = taskRepository.save(task);
             if (savedTask.getAssignee() != null) {
@@ -79,7 +72,7 @@ public class TaskService {
      * @param currentTask the task to be saved
      */
     public void notifyIfNeeded(Task previousTask, Task currentTask) {
-        if (!previousTask.getAssignee().equals(currentTask.getAssignee())) {
+        if (previousTask.getAssignee() != null && !previousTask.getAssignee().equals(currentTask.getAssignee())) {
             notificationService.notifyUser(currentTask.getAssignee(), currentTask);
         }
     }
@@ -90,7 +83,6 @@ public class TaskService {
             taskRepository.save(task);
             notifyIfNeeded(previousTask, task);
         }
-        throw new TaskNotFoundException(task.getId());
     }
 
     public void patchTask(Task task) {
@@ -99,12 +91,12 @@ public class TaskService {
         if (task.getName() != null) {
             existingTask.setName(task.getName());
         }
+        if (task.getState() != null) {
+            existingTask.setState(task.getState());
+        }
         if (task.getAssignee() != null) {
             changedAssignee = task.getAssignee().equals(existingTask.getAssignee());
             existingTask.setAssignee(task.getAssignee());
-        }
-        if (task.getState() != null) {
-            existingTask.setState(task.getState());
         }
         if (validateTask(existingTask)) {
             taskRepository.save(existingTask);
