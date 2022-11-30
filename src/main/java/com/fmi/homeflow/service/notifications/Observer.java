@@ -17,7 +17,8 @@ public interface Observer {
         if (task.getState() == null) {
             return Optional.empty();
         }
-        StringBuffer text = new StringBuffer("Task ");
+        StringBuffer text = new StringBuffer();
+        text.append("Task ");
         text.append(task.getName());
         text.append(" was appointed to you\n");
         text.append("State: ");

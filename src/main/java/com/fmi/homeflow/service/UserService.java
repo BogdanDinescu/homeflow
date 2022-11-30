@@ -28,10 +28,10 @@ public class UserService {
         }
 
         return userRepository.save(User.builder()
-                        .username(userDto.getName())
-                        .password(passwordEncoder.encode(userDto.getPassword()))
-                        .role(Role.MEMBER)
-                        .build());
+                .username(userDto.getName())
+                .password(passwordEncoder.encode(userDto.getPassword()))
+                .role(Role.MEMBER)
+                .build());
     }
 
     public URI createUserURI(User user) {
@@ -43,24 +43,15 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public UserDetailsDto updateUser(String username, UserDetailsDto userDetailsDto) {
-        return userRepository.findByUsername(username)
-                .map(optionalUser -> {
-                    optionalUser.setUsername(userDetailsDto.getName());
-                    optionalUser.setFirstName(userDetailsDto.getFirstName());
-                    optionalUser.setLastName(userDetailsDto.getLastName());
-                    optionalUser.setEmail(userDetailsDto.getEmail());
-                    optionalUser.setPhone(userDetailsDto.getPhone());
-                    return optionalUser;
-                })
-                .map(userRepository::save)
-                .map(savedUser -> UserDetailsDto.builder()
-                        .name(savedUser.getUsername())
-                        .firstName(savedUser.getFirstName())
-                        .lastName(savedUser.getLastName())
-                        .build()
-                )
-                .orElseThrow(() -> new UserNotFoundException(username));
+    public UserDetailsDto updateUser(User user, UserDetailsDto userDetailsDto) {
+        User updatedUser = updateUser(updateUserWithGivenDetails(user, userDetailsDto));
+        return UserDetailsDto.builder()
+                .name(updatedUser.getUsername())
+                .firstName(updatedUser.getFirstName())
+                .lastName(updatedUser.getLastName())
+                .email(updatedUser.getEmail())
+                .phone(updatedUser.getPhone())
+                .build();
     }
 
     public User updateUser(User user) {
@@ -71,6 +62,15 @@ public class UserService {
         userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
         userRepository.deleteByUsername(username);
+    }
+
+    private User updateUserWithGivenDetails(User user, UserDetailsDto userDetailsDto) {
+        user.setUsername(userDetailsDto.getName() == null ? user.getUsername() : userDetailsDto.getName());
+        user.setFirstName(userDetailsDto.getFirstName() == null ? user.getFirstName() : userDetailsDto.getFirstName());
+        user.setLastName(userDetailsDto.getLastName() == null ? user.getLastName() : userDetailsDto.getLastName());
+        user.setEmail(userDetailsDto.getEmail() == null ? user.getEmail() : userDetailsDto.getEmail());
+        user.setPhone(userDetailsDto.getPhone() == null ? user.getPhone() : userDetailsDto.getPhone());
+        return user;
     }
 
 }

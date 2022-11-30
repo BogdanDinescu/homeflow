@@ -3,7 +3,6 @@ package com.fmi.homeflow.model.dto;
 import com.fmi.homeflow.model.State;
 import lombok.*;
 
-import javax.persistence.Transient;
 import java.util.UUID;
 
 @Getter

@@ -1,5 +1,6 @@
 package com.fmi.homeflow.service;
 
+import com.fmi.homeflow.exception.user_exception.UserAlreadyExistsException;
 import com.fmi.homeflow.model.User;
 import com.fmi.homeflow.model.dto.UserDetailsDto;
 import com.fmi.homeflow.model.dto.UserDto;
@@ -10,7 +11,7 @@ import java.net.URI;
 
 @Service
 @AllArgsConstructor
-public final class UserFacade {
+public class UserFacade {
 
     private final UserService userService;
 
@@ -18,8 +19,7 @@ public final class UserFacade {
         User user = userService.getUserByUsername(username);
         return UserDetailsDto.builder()
                 .name(user.getUsername())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
+                .email(user.getEmail())
                 .build();
     }
 
@@ -29,7 +29,13 @@ public final class UserFacade {
     }
 
     public UserDetailsDto updateUser(String username, UserDetailsDto userDetailsDto) {
-        return userService.updateUser(username, userDetailsDto);
+        User existingUser = userService.getUserByUsername(username);
+
+        if (username.equals(existingUser.getUsername())) {
+            throw new UserAlreadyExistsException(username);
+        }
+
+        return userService.updateUser(existingUser, userDetailsDto);
     }
 
     public void deleteUser(String username) {

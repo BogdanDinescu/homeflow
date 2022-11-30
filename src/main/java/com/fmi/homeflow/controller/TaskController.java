@@ -1,6 +1,5 @@
 package com.fmi.homeflow.controller;
 
-import com.fmi.homeflow.model.Task;
 import com.fmi.homeflow.model.dto.TaskDto;
 import com.fmi.homeflow.service.TaskFacade;
 import lombok.AllArgsConstructor;

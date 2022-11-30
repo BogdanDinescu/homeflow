@@ -9,10 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-
-import static com.fmi.homeflow.utility.UserConstants.GET_USER_ROUTE;
-
 @RestController
 @RequestMapping("api/user")
 @AllArgsConstructor
@@ -20,14 +16,14 @@ class UserController {
 
     private final UserFacade userFacade;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> addUser(@RequestBody UserDto user) {
-        return ResponseEntity.created(userFacade.addUser(user)).build();
-    }
-
     @GetMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDetailsDto> getUser(@PathVariable String username) {
         return ResponseEntity.ok(userFacade.getUserByUsername(username));
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addUser(@RequestBody UserDto user) {
+        return ResponseEntity.created(userFacade.addUser(user)).build();
     }
 
     @PreAuthorize("principal.username == #username")
