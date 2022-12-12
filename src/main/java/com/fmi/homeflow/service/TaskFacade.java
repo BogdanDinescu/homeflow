@@ -18,7 +18,6 @@ public class TaskFacade {
     private final FamilyService familyService;
     private final UserService userService;
 
-
     public TaskDto getTaskById(UUID id) {
         Task task = taskService.getTaskById(id);
         return TaskDto.builder()
@@ -30,7 +29,27 @@ public class TaskFacade {
                 .build();
     }
 
-    private Task DtoToTask(TaskDto task) {
+    public void addTask(TaskDto taskDto) {
+        Task task = dtoToTask(taskDto);
+        taskService.addTask(task);
+
+    }
+
+    public void updateTask(TaskDto taskDto) {
+        Task task = dtoToTask(taskDto);
+        taskService.updateTask(task);
+    }
+
+    public void patchTask(TaskDto taskDto) {
+        Task task = dtoToTask(taskDto);
+        taskService.patchTask(task);
+    }
+
+    public void deleteTaskById(UUID id) {
+        taskService.deleteTaskById(id);
+    }
+
+    private Task dtoToTask(TaskDto task) {
         Family family = familyService.getFamilyById(task.getFamilyId());
         User user = null;
         if (task.getAssigneeName() != null) {
@@ -43,26 +62,6 @@ public class TaskFacade {
                 .assignee(user)
                 .family(family)
                 .build();
-    }
-
-    public void addTask(TaskDto taskDto) {
-        Task task = DtoToTask(taskDto);
-        taskService.addTask(task);
-
-    }
-
-    public void updateTask(TaskDto taskDto) {
-        Task task = DtoToTask(taskDto);
-        taskService.updateTask(task);
-    }
-
-    public void patchTask(TaskDto taskDto) {
-        Task task = DtoToTask(taskDto);
-        taskService.patchTask(task);
-    }
-
-    public void deleteTaskById(UUID id) {
-        taskService.deleteTaskById(id);
     }
 
 }

@@ -51,6 +51,7 @@ public class UserService {
                 .lastName(updatedUser.getLastName())
                 .email(updatedUser.getEmail())
                 .phone(updatedUser.getPhone())
+                .familyId(updatedUser.getUserFamily().getId())
                 .build();
     }
 

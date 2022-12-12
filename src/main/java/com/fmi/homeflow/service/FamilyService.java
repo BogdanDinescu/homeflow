@@ -5,6 +5,7 @@ import com.fmi.homeflow.exception.user_exception.FamilyNotFoundException;
 import com.fmi.homeflow.model.Family;
 import com.fmi.homeflow.model.User;
 import com.fmi.homeflow.repository.FamilyRepository;
+import com.fmi.homeflow.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +18,24 @@ import java.util.UUID;
 public class FamilyService {
 
     private final FamilyRepository familyRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     public Family createFamily(String name, Set<User> members) {
         Family family = Family.builder().name(name).membersList(members).build();
+
+        for (User u:members) {
+            User dbUser = userRepository.getReferenceById(u.getId());
+            dbUser.setUserFamily(family);
+            userRepository.save(dbUser);
+        }
+
         return familyRepository.save(family);
     }
 
     public Family getFamilyById(UUID id) {
-        Optional<Family> familyOptional = familyRepository.findById(id);
-        if (familyOptional.isEmpty()) {
-            throw new FamilyNotFoundException(id);
-        }
-        return familyOptional.get();
+        return familyRepository.findById(id)
+                .orElseThrow(() -> new FamilyNotFoundException(id));
     }
 
 

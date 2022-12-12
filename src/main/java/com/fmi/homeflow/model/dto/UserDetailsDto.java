@@ -7,12 +7,15 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetailsDto {
+
+    private UUID id;
 
     @NotNull
     @NotBlank
@@ -29,6 +32,8 @@ public class UserDetailsDto {
     private String email;
 
     private String phone;
+
+    private UUID familyId;
 
 }
 

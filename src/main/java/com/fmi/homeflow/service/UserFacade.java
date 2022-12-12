@@ -18,8 +18,10 @@ public class UserFacade {
     public UserDetailsDto getUserByUsername(String username) {
         User user = userService.getUserByUsername(username);
         return UserDetailsDto.builder()
+                .id(user.getId())
                 .name(user.getUsername())
                 .email(user.getEmail())
+                .familyId(user.getUserFamily().getId())
                 .build();
     }
 
