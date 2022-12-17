@@ -1,5 +1,6 @@
 package com.fmi.homeflow.service;
 
+import com.fmi.homeflow.exception.user_exception.UserNotFoundException;
 import com.fmi.homeflow.model.Role;
 import com.fmi.homeflow.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class AuthenticationService implements UserDetailsService{
                         .authorities(getAuthorities(user.getRole()))
                         .build()
                 )
-                .orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found"));
+                .orElseThrow(() -> new UserNotFoundException("Username " + username + "not found"));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Role role) {
