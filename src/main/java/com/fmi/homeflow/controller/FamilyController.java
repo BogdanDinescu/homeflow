@@ -1,7 +1,7 @@
 package com.fmi.homeflow.controller;
 
 import com.fmi.homeflow.model.Family;
-import com.fmi.homeflow.service.FamilyService;
+import com.fmi.homeflow.service.family.FamilyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

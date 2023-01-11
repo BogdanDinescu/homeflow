@@ -1,10 +1,11 @@
-package com.fmi.homeflow.service;
-
+package com.fmi.homeflow.service.task;
 
 import com.fmi.homeflow.model.Family;
 import com.fmi.homeflow.model.Task;
-import com.fmi.homeflow.model.User;
+import com.fmi.homeflow.model.UserEntity;
 import com.fmi.homeflow.model.dto.TaskDto;
+import com.fmi.homeflow.service.family.FamilyService;
+import com.fmi.homeflow.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,12 @@ public class TaskFacade {
     public TaskDto getTaskById(UUID id) {
         Task task = taskService.getTaskById(id);
         return TaskDto.builder()
-                .id(task.getId())
-                .name(task.getName())
-                .state(task.getState())
-                .assigneeName(task.getAssignee().getUsername())
-                .familyId(task.getFamily().getId())
-                .build();
+            .id(task.getId())
+            .name(task.getName())
+            .state(task.getState())
+            .assigneeName(task.getAssignee().getUsername())
+            .familyId(task.getFamily().getId())
+            .build();
     }
 
     public void addTask(TaskDto taskDto) {
@@ -51,17 +52,17 @@ public class TaskFacade {
 
     private Task dtoToTask(TaskDto task) {
         Family family = familyService.getFamilyById(task.getFamilyId());
-        User user = null;
+        UserEntity userEntity = null;
         if (task.getAssigneeName() != null) {
-            user = userService.getUserByUsername(task.getAssigneeName());
+            userEntity = userService.getUserByUsername(task.getAssigneeName());
         }
         return Task.builder()
-                .id(task.getId())
-                .name(task.getName())
-                .state(task.getState())
-                .assignee(user)
-                .family(family)
-                .build();
+            .id(task.getId())
+            .name(task.getName())
+            .state(task.getState())
+            .assignee(userEntity)
+            .family(family)
+            .build();
     }
 
 }

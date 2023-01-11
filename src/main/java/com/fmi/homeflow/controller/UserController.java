@@ -2,7 +2,7 @@ package com.fmi.homeflow.controller;
 
 import com.fmi.homeflow.model.dto.UserDetailsDto;
 import com.fmi.homeflow.model.dto.UserDto;
-import com.fmi.homeflow.service.UserFacade;
+import com.fmi.homeflow.service.user.UserFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +28,8 @@ class UserController {
 
     @PreAuthorize("principal.username == #username")
     @PutMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDetailsDto> updateUser(
-            @PathVariable String username,
-            @RequestBody UserDetailsDto userDetailsDto
-    ) {
+    public ResponseEntity<UserDetailsDto> updateUser(@PathVariable String username,
+                                                     @RequestBody UserDetailsDto userDetailsDto) {
         return ResponseEntity.ok(userFacade.updateUser(username, userDetailsDto));
     }
 

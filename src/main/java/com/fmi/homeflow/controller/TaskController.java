@@ -1,7 +1,7 @@
 package com.fmi.homeflow.controller;
 
 import com.fmi.homeflow.model.dto.TaskDto;
-import com.fmi.homeflow.service.TaskFacade;
+import com.fmi.homeflow.service.task.TaskFacade;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

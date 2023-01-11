@@ -1,12 +1,7 @@
 package com.fmi.homeflow.service.notifications;
 
 
-import com.fmi.homeflow.model.User;
-import org.springframework.mail.MailException;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessagePreparator;
+import com.fmi.homeflow.model.UserEntity;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
@@ -69,11 +64,11 @@ public class EmailNotifier implements Observer {
         if (notification == null) {
             return Optional.empty();
         }
-        User user = notification.getUser();
-        if (user == null) {
+        UserEntity userEntity = notification.getUserEntity();
+        if (userEntity == null) {
             return Optional.empty();
         }
-        String emailTo = user.getEmail();
+        String emailTo = userEntity.getEmail();
         if (emailTo == null) {
             return Optional.empty();
         }

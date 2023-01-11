@@ -37,6 +37,6 @@ public class Task {
     @ManyToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
-    private User assignee;
+    private UserEntity assignee;
 
 }

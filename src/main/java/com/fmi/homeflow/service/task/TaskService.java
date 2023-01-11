@@ -1,11 +1,13 @@
-package com.fmi.homeflow.service;
+package com.fmi.homeflow.service.task;
 
 import com.fmi.homeflow.exception.InvalidDataException;
 import com.fmi.homeflow.exception.user_exception.TaskNotFoundException;
 import com.fmi.homeflow.model.Family;
 import com.fmi.homeflow.model.Task;
-import com.fmi.homeflow.model.User;
+import com.fmi.homeflow.model.UserEntity;
 import com.fmi.homeflow.repository.TaskRepository;
+import com.fmi.homeflow.service.family.FamilyService;
+import com.fmi.homeflow.service.notifications.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -57,8 +59,8 @@ public class TaskService {
             throw new InvalidDataException();
         }
         if (task.getAssignee() != null) {
-            User user = task.getAssignee();
-            boolean isInFamily = familyService.memberIsInFamily(user, family.getId());
+            UserEntity userEntity = task.getAssignee();
+            boolean isInFamily = familyService.memberIsInFamily(userEntity, family.getId());
             if (!isInFamily) {
                 throw new InvalidDataException();
             }

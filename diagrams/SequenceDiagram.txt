@@ -1,12 +1,12 @@
 sequenceDiagram
 
-    actor user
+    actor userEntity
     participant UserController
     participant UserFacade
     participant UserService
     participant UserRepository
 
-    user ->> UserController: addUser
+    userEntity ->> UserController: addUser
     UserController ->> UserController: ValidateRequestBody
     UserController ->> UserFacade: addUser
     UserFacade ->> +UserService: addUser
@@ -15,13 +15,13 @@ sequenceDiagram
 
     break when the result is true
         UserService -->> UserController: throwUserAlreadyExistsException
-        UserController -->> user: Show failure cause
+        UserController -->> userEntity: Show failure cause
     end
 
     UserService ->> +UserRepository: saveUserData
-    UserRepository -->> -UserService: Returns saved user
+    UserRepository -->> -UserService: Returns saved userEntity
     UserService -->> -UserFacade:
     UserFacade ->> +UserService: createUserURI
-    UserService -->> -UserFacade: Returns URI of the saved user
+    UserService -->> -UserFacade: Returns URI of the saved userEntity
     UserFacade -->> UserController:
-    UserController -->> user: Show success message
+    UserController -->> userEntity: Show success message

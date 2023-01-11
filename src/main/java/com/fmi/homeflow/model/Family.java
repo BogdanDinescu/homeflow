@@ -28,6 +28,6 @@ public class Family {
 
     @OneToMany(mappedBy = "userFamily")
     @JsonIgnore
-    private Set<User> membersList;
+    private Set<UserEntity> membersList;
 
 }
