@@ -11,6 +11,7 @@ import com.fmi.homeflow.service.notifications.NotificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,6 +25,10 @@ public class TaskService {
     public Task getTaskById(UUID id) {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
+    }
+
+    public List<Task> getTasksInFamily(Family family) {
+        return taskRepository.findTaskByFamily(family);
     }
 
     public void deleteTaskById(UUID id) {

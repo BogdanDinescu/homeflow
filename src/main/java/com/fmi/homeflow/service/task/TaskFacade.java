@@ -9,6 +9,7 @@ import com.fmi.homeflow.service.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,6 +29,20 @@ public class TaskFacade {
             .assigneeName(task.getAssignee().getUsername())
             .familyId(task.getFamily().getId())
             .build();
+    }
+
+    public List<TaskDto> getTasksInFamily(UUID id) {
+        Family family = familyService.getFamilyById(id);
+        List<Task> tasks = taskService.getTasksInFamily(family);
+        return tasks.stream()
+                .map(task -> TaskDto.builder()
+                        .id(task.getId())
+                        .name(task.getName())
+                        .state(task.getState())
+                        .familyId(id)
+                        .assigneeName(task.getAssignee()!=null ? task.getAssignee().getUsername() : "")
+                        .build())
+                .toList();
     }
 
     public void addTask(TaskDto taskDto) {
