@@ -13,7 +13,7 @@ import java.util.UUID;
 import static com.fmi.homeflow.utility.UserConstants.GET_USER_ROUTE;
 
 @RestController
-@RequestMapping("api/family")
+@RequestMapping("api/families")
 @AllArgsConstructor
 public class FamilyController {
 

@@ -13,7 +13,7 @@ import java.util.UUID;
 import static com.fmi.homeflow.utility.UserConstants.GET_USER_ROUTE;
 
 @RestController
-@RequestMapping("api/task")
+@RequestMapping("api/tasks")
 @AllArgsConstructor
 public class TaskController {
 
