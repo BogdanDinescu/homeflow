@@ -1,6 +1,7 @@
 package com.fmi.homeflow.controller;
 
 import com.fmi.homeflow.model.Family;
+import com.fmi.homeflow.model.dto.FamilyDto;
 import com.fmi.homeflow.service.family.FamilyService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class FamilyController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createFamily(@RequestBody Family family) {
+    public ResponseEntity<Void> createFamily(@RequestBody FamilyDto family) {
         Family serviceFamily = familyService.createFamily(family.getName(), family.getMembersList());
         return ResponseEntity.created(URI.create(GET_USER_ROUTE + serviceFamily.getId())).build();
     }

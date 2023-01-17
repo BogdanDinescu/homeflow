@@ -21,7 +21,7 @@ public class UserFacade {
             .id(userEntity.getId())
             .name(userEntity.getUsername())
             .email(userEntity.getEmail())
-            .familyId(userEntity.getUserFamily().getId())
+            .familyId(userEntity.getUserFamily() != null ? userEntity.getUserFamily().getId() : null)
             .build();
     }
 

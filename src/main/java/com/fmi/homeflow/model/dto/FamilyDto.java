@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,5 +19,6 @@ public class FamilyDto {
     @NotNull
     @NotEmpty
     private String name;
+    private Set<String> membersList;
 
 }

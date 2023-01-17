@@ -20,7 +20,7 @@ import static com.fmi.homeflow.utility.UserConstants.USER_ROUTE;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
-    private static final String[] APIS = {"/api/users", "/api/tasks", "/api/families"};
+    private static final String[] APIS = {"/api/users/**", "/api/tasks/**", "/api/families/**"};
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final PasswordEncoder passwordEncoder;
 

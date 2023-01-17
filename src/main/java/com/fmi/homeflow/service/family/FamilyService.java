@@ -21,16 +21,15 @@ public class FamilyService {
     private final UserRepository userRepository;
     private final UserService userService;
 
-    public Family createFamily(String name, Set<UserEntity> members) {
-        Family family = Family.builder().name(name).membersList(members).build();
+    public Family createFamily(String name, Set<String> members) {
+        Family familyToBeInserted = Family.builder().name(name).build();
+        Family family = familyRepository.save(familyToBeInserted);
 
-        for (UserEntity u:members) {
-            UserEntity dbUserEntity = userRepository.getReferenceById(u.getId());
-            dbUserEntity.setUserFamily(family);
-            userRepository.save(dbUserEntity);
+        for (String username : members) {
+            addMemberToFamily(username, family.getId());
         }
 
-        return familyRepository.save(family);
+        return family;
     }
 
     public Family getFamilyById(UUID id) {
