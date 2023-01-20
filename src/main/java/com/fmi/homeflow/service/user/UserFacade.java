@@ -32,11 +32,6 @@ public class UserFacade {
 
     public UserDetailsDto updateUser(String username, UserDetailsDto userDetailsDto) {
         UserEntity existingUserEntity = userService.getUserByUsername(username);
-
-        if (username.equals(existingUserEntity.getUsername())) {
-            throw new UserAlreadyExistsException(username);
-        }
-
         return userService.updateUser(existingUserEntity, userDetailsDto);
     }
 
