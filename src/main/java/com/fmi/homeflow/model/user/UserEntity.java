@@ -59,11 +59,11 @@ public class UserEntity implements UserDetails {
     @ManyToOne()
     @JoinColumn(name = "family_id", referencedColumnName = "id")
     @JsonIgnore
-    private FamilyEntity userFamilyEntity;
+    private FamilyEntity userFamily;
 
     @OneToMany(mappedBy = "assignee")
     @JsonIgnore
-    private Set<TaskEntity> taskEntities;
+    private Set<TaskEntity> tasks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

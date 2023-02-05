@@ -28,7 +28,7 @@ public class TaskService {
     }
 
     public List<TaskEntity> getTasksInFamily(FamilyEntity familyEntity) {
-        return taskRepository.findTaskByFamily(familyEntity);
+        return taskRepository.findTaskByFamilyEntity(familyEntity);
     }
 
     public void deleteTaskById(UUID id) {

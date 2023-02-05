@@ -20,7 +20,7 @@ public class UsersMapper {
             .lastName(userEntity.getLastName())
             .email(userEntity.getEmail())
             .phone(userEntity.getPhone())
-            .familyId(userEntity.getUserFamilyEntity() != null ? userEntity.getUserFamilyEntity().getId() : null)
+            .familyId(userEntity.getUserFamily() != null ? userEntity.getUserFamily().getId() : null)
             .build();
     }
 

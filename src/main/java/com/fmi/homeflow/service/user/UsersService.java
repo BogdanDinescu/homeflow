@@ -47,12 +47,12 @@ public class UsersService {
 
     public boolean memberIsInFamily(UserEntity userEntity, UUID familyId) {
         UserEntity familyMember = getUserByUsername(userEntity.getUsername());
-        return familyMember.getUserFamilyEntity().getId().equals(familyId);
+        return familyMember.getUserFamily().getId().equals(familyId);
     }
 
     public boolean memberIsInFamily(String username, UUID familyId) {
         UserEntity userEntity = getUserByUsername(username);
-        return userEntity.getUserFamilyEntity().getId().equals(familyId);
+        return userEntity.getUserFamily().getId().equals(familyId);
     }
 
     private UserEntity addUser(UserEntity userEntity) {

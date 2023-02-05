@@ -36,16 +36,16 @@ public class FamiliesService {
 
     public UserEntity addMemberToFamily(UserEntity userEntity, UUID familyId) {
         FamilyEntity familyEntity = getFamilyById(familyId);
-        userEntity.setUserFamilyEntity(familyEntity);
+        userEntity.setUserFamily(familyEntity);
         return userEntity;
     }
 
     public UserEntity removeMemberFromFamily(UserEntity userEntity, UUID familyId) {
-        if (userEntity.getUserFamilyEntity().getId().equals(familyId)) {
+        if (userEntity.getUserFamily().getId().equals(familyId)) {
             throw new InvalidDataException("familyId");
         }
 
-        userEntity.setUserFamilyEntity(null);
+        userEntity.setUserFamily(null);
         return userEntity;
     }
 
