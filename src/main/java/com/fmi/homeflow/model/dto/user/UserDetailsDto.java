@@ -1,4 +1,4 @@
-package com.fmi.homeflow.model.dto;
+package com.fmi.homeflow.model.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserDetailsDto {
 
+    @NotNull
     private UUID id;
 
     @NotNull
@@ -29,8 +30,10 @@ public class UserDetailsDto {
     @NotBlank
     private String lastName;
 
+    @NotBlank
     private String email;
 
+    @NotBlank
     private String phone;
 
     private UUID familyId;

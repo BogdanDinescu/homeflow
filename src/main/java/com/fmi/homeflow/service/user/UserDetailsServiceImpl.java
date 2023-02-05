@@ -1,7 +1,7 @@
 package com.fmi.homeflow.service.user;
 
-import com.fmi.homeflow.model.Role;
-import com.fmi.homeflow.model.UserEntity;
+import com.fmi.homeflow.model.user.Role;
+import com.fmi.homeflow.model.user.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,11 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+    private final UsersService usersService;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        UserEntity existingUser = userService.getUserByUsername(username);
+        UserEntity existingUser = usersService.getUserByUsername(username);
         return User.withUsername(existingUser.getUsername())
             .password(existingUser.getPassword())
             .credentialsExpired(false)

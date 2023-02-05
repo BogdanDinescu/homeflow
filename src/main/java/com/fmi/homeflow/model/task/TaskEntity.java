@@ -1,6 +1,8 @@
-package com.fmi.homeflow.model;
+package com.fmi.homeflow.model.task;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fmi.homeflow.model.family.FamilyEntity;
+import com.fmi.homeflow.model.user.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Task {
+public class TaskEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -32,7 +34,7 @@ public class Task {
     @ManyToOne()
     @JoinColumn(name = "family_id", referencedColumnName = "id")
     @JsonIgnore
-    private Family family;
+    private FamilyEntity familyEntity;
 
     @ManyToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")

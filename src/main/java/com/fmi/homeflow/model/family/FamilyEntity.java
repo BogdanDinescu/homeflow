@@ -1,6 +1,7 @@
-package com.fmi.homeflow.model;
+package com.fmi.homeflow.model.family;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fmi.homeflow.model.user.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Family {
+public class FamilyEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")

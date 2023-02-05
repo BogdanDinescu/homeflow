@@ -1,24 +1,25 @@
-package com.fmi.homeflow.model.dto;
+package com.fmi.homeflow.model.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
 @EqualsAndHashCode
-@AllArgsConstructor
-public class FamilyDto {
+@AllArgsConstructor()
+public class CreateUserRequest {
 
     @NotNull
-    @NotEmpty
+    @NotBlank
     private String name;
-    private Set<String> membersList;
+
+    @NotNull
+    @NotBlank
+    private String password;
 
 }

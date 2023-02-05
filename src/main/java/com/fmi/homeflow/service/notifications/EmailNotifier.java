@@ -1,7 +1,7 @@
 package com.fmi.homeflow.service.notifications;
 
 
-import com.fmi.homeflow.model.UserEntity;
+import com.fmi.homeflow.model.user.UserEntity;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
@@ -37,7 +37,7 @@ public class EmailNotifier implements Observer {
         }
         String emailTo = emailToOptional.get();
 
-        Optional<String> messageOptional = textFromTask(notification.getTask());
+        Optional<String> messageOptional = textFromTask(notification.getTaskEntity());
         if (messageOptional.isEmpty()) {
             return;
         }

@@ -1,7 +1,7 @@
 package com.fmi.homeflow.service.notifications;
 
-import com.fmi.homeflow.model.Task;
-import com.fmi.homeflow.model.UserEntity;
+import com.fmi.homeflow.model.task.TaskEntity;
+import com.fmi.homeflow.model.user.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class NotificationService {
+public class NotificationsService {
 
     List<Observer> observers;
 
@@ -20,8 +20,8 @@ public class NotificationService {
         addObserver(new SMSNotifier());
     }
 
-    public void notifyUser(UserEntity userEntity, Task task) {
-        observers.forEach(observer -> observer.update(new Notification(userEntity, task)));
+    public void notifyUser(UserEntity userEntity, TaskEntity taskEntity) {
+        observers.forEach(observer -> observer.update(new Notification(userEntity, taskEntity)));
     }
 
     public synchronized void addObserver(Observer observer) {

@@ -1,6 +1,6 @@
-package com.fmi.homeflow.model.dto;
+package com.fmi.homeflow.model.dto.task;
 
-import com.fmi.homeflow.model.State;
+import com.fmi.homeflow.model.task.State;
 import lombok.*;
 
 import java.util.UUID;

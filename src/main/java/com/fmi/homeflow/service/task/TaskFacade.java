@@ -1,11 +1,13 @@
 package com.fmi.homeflow.service.task;
 
-import com.fmi.homeflow.model.Family;
-import com.fmi.homeflow.model.Task;
-import com.fmi.homeflow.model.UserEntity;
-import com.fmi.homeflow.model.dto.TaskDto;
-import com.fmi.homeflow.service.family.FamilyService;
-import com.fmi.homeflow.service.user.UserService;
+import com.fmi.homeflow.model.dto.task.TaskDto;
+import com.fmi.homeflow.model.family.FamilyEntity;
+import com.fmi.homeflow.model.task.TaskEntity;
+import com.fmi.homeflow.model.user.UserEntity;
+import com.fmi.homeflow.service.family.FamiliesService;
+import com.fmi.homeflow.service.notifications.NotificationsService;
+import com.fmi.homeflow.service.user.UsersService;
+import com.fmi.homeflow.transformer.TasksMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,66 +19,55 @@ import java.util.UUID;
 public class TaskFacade {
 
     private final TaskService taskService;
-    private final FamilyService familyService;
-    private final UserService userService;
+    private final FamiliesService familiesService;
+    private final UsersService usersService;
+    private final TasksMapper tasksMapper;
+    private final NotificationsService notificationsService;
 
     public TaskDto getTaskById(UUID id) {
-        Task task = taskService.getTaskById(id);
-        return TaskDto.builder()
-            .id(task.getId())
-            .name(task.getName())
-            .state(task.getState())
-            .assigneeName(task.getAssignee().getUsername())
-            .familyId(task.getFamily().getId())
-            .build();
+        return tasksMapper.mapToTaskDto(taskService.getTaskById(id));
     }
 
     public List<TaskDto> getTasksInFamily(UUID id) {
-        Family family = familyService.getFamilyById(id);
-        List<Task> tasks = taskService.getTasksInFamily(family);
-        return tasks.stream()
-                .map(task -> TaskDto.builder()
-                        .id(task.getId())
-                        .name(task.getName())
-                        .state(task.getState())
-                        .familyId(id)
-                        .assigneeName(task.getAssignee()!=null ? task.getAssignee().getUsername() : "")
-                        .build())
-                .toList();
+        FamilyEntity familyEntity = familiesService.getFamilyById(id);
+        List<TaskEntity> tasksInFamily = taskService.getTasksInFamily(familyEntity);
+        return tasksInFamily.stream()
+            .map(tasksMapper::mapToTaskDto)
+            .toList();
     }
 
     public void addTask(TaskDto taskDto) {
-        Task task = dtoToTask(taskDto);
-        taskService.addTask(task);
+        TaskEntity taskEntity = dtoToTask(taskDto);
+        taskService.addTask(taskEntity);
 
     }
 
     public void updateTask(TaskDto taskDto) {
-        Task task = dtoToTask(taskDto);
-        taskService.updateTask(task);
+        TaskEntity taskEntity = dtoToTask(taskDto);
+        taskService.updateTask(taskEntity);
     }
 
     public void patchTask(TaskDto taskDto) {
-        Task task = dtoToTask(taskDto);
-        taskService.patchTask(task);
+        TaskEntity taskEntity = dtoToTask(taskDto);
+        taskService.patchTask(taskEntity);
     }
 
     public void deleteTaskById(UUID id) {
         taskService.deleteTaskById(id);
     }
 
-    private Task dtoToTask(TaskDto task) {
-        Family family = familyService.getFamilyById(task.getFamilyId());
+    private TaskEntity dtoToTask(TaskDto task) {
+        FamilyEntity familyEntity = familiesService.getFamilyById(task.getFamilyId());
         UserEntity userEntity = null;
         if (task.getAssigneeName() != null) {
-            userEntity = userService.getUserByUsername(task.getAssigneeName());
+            userEntity = usersService.getUserByUsername(task.getAssigneeName());
         }
-        return Task.builder()
+        return TaskEntity.builder()
             .id(task.getId())
             .name(task.getName())
             .state(task.getState())
             .assignee(userEntity)
-            .family(family)
+            .familyEntity(familyEntity)
             .build();
     }
 
