@@ -2,12 +2,12 @@ package com.fmi.homeflow.service.task;
 
 import com.fmi.homeflow.exception.InvalidDataException;
 import com.fmi.homeflow.exception.user_exception.TaskNotFoundException;
-import com.fmi.homeflow.model.Family;
-import com.fmi.homeflow.model.Task;
-import com.fmi.homeflow.model.UserEntity;
+import com.fmi.homeflow.model.family.FamilyEntity;
+import com.fmi.homeflow.model.task.TaskEntity;
+import com.fmi.homeflow.model.user.UserEntity;
 import com.fmi.homeflow.repository.TaskRepository;
-import com.fmi.homeflow.service.family.FamilyService;
-import com.fmi.homeflow.service.notifications.NotificationService;
+import com.fmi.homeflow.service.notifications.NotificationsService;
+import com.fmi.homeflow.service.user.UsersService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,29 +19,29 @@ import java.util.UUID;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final FamilyService familyService;
-    private final NotificationService notificationService;
+    private final NotificationsService notificationsService;
+    private final UsersService usersService;
 
-    public Task getTaskById(UUID id) {
+    public TaskEntity getTaskById(UUID id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+            .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
-    public List<Task> getTasksInFamily(Family family) {
-        return taskRepository.findTaskByFamily(family);
+    public List<TaskEntity> getTasksInFamily(FamilyEntity familyEntity) {
+        return taskRepository.findTaskByFamilyEntity(familyEntity);
     }
 
     public void deleteTaskById(UUID id) {
         taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+            .orElseThrow(() -> new TaskNotFoundException(id));
         taskRepository.deleteById(id);
     }
 
-    public void addTask(Task task) {
-        if (validateTask(task)) {
-            Task savedTask = taskRepository.save(task);
-            if (savedTask.getAssignee() != null) {
-                notificationService.notifyUser(task.getAssignee(), task);
+    public void addTask(TaskEntity taskEntity) {
+        if (validateTask(taskEntity)) {
+            TaskEntity savedTaskEntity = taskRepository.save(taskEntity);
+            if (savedTaskEntity.getAssignee() != null) {
+                notificationsService.notifyUser(taskEntity.getAssignee(), taskEntity);
             }
         }
     }
@@ -53,19 +53,19 @@ public class TaskService {
      *     <li>If the task is assigned to someone, verify that the that user is a member of that family</li>
      * </ul>
      *
-     * @param task the task to validate
+     * @param taskEntity the task to validate
      * @return <ul><li>true if it's valid</li>
      *         <li>false if it's not</li></ul>
      * @throws InvalidDataException if the task has no family assigned.
      */
-    public boolean validateTask(Task task) {
-        Family family = task.getFamily();
-        if (family == null) {
+    public boolean validateTask(TaskEntity taskEntity) {
+        FamilyEntity familyEntity = taskEntity.getFamilyEntity();
+        if (familyEntity == null) {
             throw new InvalidDataException();
         }
-        if (task.getAssignee() != null) {
-            UserEntity userEntity = task.getAssignee();
-            boolean isInFamily = familyService.memberIsInFamily(userEntity, family.getId());
+        if (taskEntity.getAssignee() != null) {
+            UserEntity userEntity = taskEntity.getAssignee();
+            boolean isInFamily = usersService.memberIsInFamily(userEntity, familyEntity.getId());
             if (!isInFamily) {
                 throw new InvalidDataException();
             }
@@ -76,40 +76,40 @@ public class TaskService {
     /**
      * Calls the notification service if the task have the assignee changed
      *
-     * @param previousTask previous task
-     * @param currentTask  the task to be saved
+     * @param previousTaskEntity previous task
+     * @param currentTaskEntity  the task to be saved
      */
-    public void notifyIfNeeded(Task previousTask, Task currentTask) {
-        if (previousTask.getAssignee() != null && !previousTask.getAssignee().equals(currentTask.getAssignee())) {
-            notificationService.notifyUser(currentTask.getAssignee(), currentTask);
+    public void notifyIfNeeded(TaskEntity previousTaskEntity, TaskEntity currentTaskEntity) {
+        if (currentTaskEntity.getAssignee() != null && !currentTaskEntity.getAssignee().equals(previousTaskEntity.getAssignee())) {
+            notificationsService.notifyUser(currentTaskEntity.getAssignee(), currentTaskEntity);
         }
     }
 
-    public void updateTask(Task task) {
-        Task previousTask = getTaskById(task.getId());
-        if (validateTask(task)) {
-            taskRepository.save(task);
-            notifyIfNeeded(previousTask, task);
+    public void updateTask(TaskEntity taskEntity) {
+        TaskEntity previousTaskEntity = getTaskById(taskEntity.getId());
+        if (validateTask(taskEntity)) {
+            taskRepository.save(taskEntity);
+            notifyIfNeeded(previousTaskEntity, taskEntity);
         }
     }
 
-    public void patchTask(Task task) {
-        Task existingTask = getTaskById(task.getId());
+    public void patchTask(TaskEntity taskEntity) {
+        TaskEntity existingTaskEntity = getTaskById(taskEntity.getId());
         boolean changedAssignee = false;
-        if (task.getName() != null) {
-            existingTask.setName(task.getName());
+        if (taskEntity.getName() != null) {
+            existingTaskEntity.setName(taskEntity.getName());
         }
-        if (task.getState() != null) {
-            existingTask.setState(task.getState());
+        if (taskEntity.getState() != null) {
+            existingTaskEntity.setState(taskEntity.getState());
         }
-        if (task.getAssignee() != null) {
-            changedAssignee = task.getAssignee().equals(existingTask.getAssignee());
-            existingTask.setAssignee(task.getAssignee());
+        if (taskEntity.getAssignee() != null) {
+            changedAssignee = taskEntity.getAssignee().equals(existingTaskEntity.getAssignee());
+            existingTaskEntity.setAssignee(taskEntity.getAssignee());
         }
-        if (validateTask(existingTask)) {
-            taskRepository.save(existingTask);
-            if (changedAssignee && existingTask.getAssignee() != null) {
-                notificationService.notifyUser(existingTask.getAssignee(), existingTask);
+        if (validateTask(existingTaskEntity)) {
+            taskRepository.save(existingTaskEntity);
+            if (changedAssignee && existingTaskEntity.getAssignee() != null) {
+                notificationsService.notifyUser(existingTaskEntity.getAssignee(), existingTaskEntity);
             }
         }
     }

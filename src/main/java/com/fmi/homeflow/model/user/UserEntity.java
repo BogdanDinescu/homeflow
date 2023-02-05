@@ -1,6 +1,8 @@
-package com.fmi.homeflow.model;
+package com.fmi.homeflow.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fmi.homeflow.model.family.FamilyEntity;
+import com.fmi.homeflow.model.task.TaskEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -57,11 +59,11 @@ public class UserEntity implements UserDetails {
     @ManyToOne()
     @JoinColumn(name = "family_id", referencedColumnName = "id")
     @JsonIgnore
-    private Family userFamily;
+    private FamilyEntity userFamily;
 
     @OneToMany(mappedBy = "assignee")
     @JsonIgnore
-    private Set<Task> tasks;
+    private Set<TaskEntity> tasks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

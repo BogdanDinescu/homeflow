@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static com.fmi.homeflow.utility.UserConstants.USER_ROUTE;
+import static com.fmi.homeflow.utility.PlatformConstants.USER_ROUTE;
 
 @Configuration
 @AllArgsConstructor
