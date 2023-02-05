@@ -54,7 +54,7 @@ public class TasksController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("@usersService.memberIsInFamily(principal.username, @taskService.getTaskById(#id).familyEntity().id)")
+    @PreAuthorize("@usersService.memberIsInFamily(principal.username, @taskService.getTaskById(#id).getFamilyEntity().id)")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable UUID id) {
         taskFacade.deleteTaskById(id);

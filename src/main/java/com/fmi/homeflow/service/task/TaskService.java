@@ -80,7 +80,7 @@ public class TaskService {
      * @param currentTaskEntity  the task to be saved
      */
     public void notifyIfNeeded(TaskEntity previousTaskEntity, TaskEntity currentTaskEntity) {
-        if (previousTaskEntity.getAssignee() != null && !previousTaskEntity.getAssignee().equals(currentTaskEntity.getAssignee())) {
+        if (currentTaskEntity.getAssignee() != null && !currentTaskEntity.getAssignee().equals(previousTaskEntity.getAssignee())) {
             notificationsService.notifyUser(currentTaskEntity.getAssignee(), currentTaskEntity);
         }
     }

@@ -41,7 +41,7 @@ public class FamiliesService {
     }
 
     public UserEntity removeMemberFromFamily(UserEntity userEntity, UUID familyId) {
-        if (userEntity.getUserFamily().getId().equals(familyId)) {
+        if (!userEntity.getUserFamily().getId().equals(familyId)) {
             throw new InvalidDataException("familyId");
         }
 
