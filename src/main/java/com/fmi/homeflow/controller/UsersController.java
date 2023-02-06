@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("api/users")
 @AllArgsConstructor
@@ -22,7 +24,7 @@ class UsersController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> addUser(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<Void> addUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
         return ResponseEntity.created(usersFacade.addUser(createUserRequest)).build();
     }
 
