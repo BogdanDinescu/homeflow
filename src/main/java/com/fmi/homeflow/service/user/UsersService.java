@@ -24,8 +24,18 @@ public class UsersService {
             .orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public URI createUser(UserEntity userEntity) {
-        return createUserURI(addUser(userEntity));
+    public UserEntity addUser(UserEntity userEntity) {
+        return usersRepository.save(userEntity);
+    }
+
+    public void checkIfUsernameIsAlreadyUsed(UserEntity userEntity) {
+        if (usersRepository.existsByUsername(userEntity.getUsername())) {
+            throw new UserAlreadyExistsException(userEntity.getUsername());
+        }
+    }
+
+    public URI createUserURI(UserEntity userEntity) {
+        return URI.create(GET_USER_ROUTE + userEntity.getUsername());
     }
 
     public UserEntity updateUser(String username, UserDetailsDto userDetailsDto) {
@@ -53,18 +63,6 @@ public class UsersService {
     public boolean memberIsInFamily(String username, UUID familyId) {
         UserEntity userEntity = getUserByUsername(username);
         return userEntity.getUserFamily().getId().equals(familyId);
-    }
-
-    private UserEntity addUser(UserEntity userEntity) {
-        if (usersRepository.existsByUsername(userEntity.getUsername())) {
-            throw new UserAlreadyExistsException(userEntity.getUsername());
-        }
-
-        return usersRepository.save(userEntity);
-    }
-
-    private URI createUserURI(UserEntity userEntity) {
-        return URI.create(GET_USER_ROUTE + userEntity.getUsername());
     }
 
     private UserEntity updateUserData(UserEntity userEntity, UserDetailsDto userDetailsDto) {

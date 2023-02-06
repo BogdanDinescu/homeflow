@@ -2,6 +2,7 @@ package com.fmi.homeflow.service.user;
 
 import com.fmi.homeflow.model.dto.user.CreateUserRequest;
 import com.fmi.homeflow.model.dto.user.UserDetailsDto;
+import com.fmi.homeflow.model.user.UserEntity;
 import com.fmi.homeflow.transformer.UsersMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +25,10 @@ public class UsersFacade {
     }
 
     public URI addUser(CreateUserRequest createUserRequest) {
-        return usersService.createUser(usersMapper.mapToUserEntity(createUserRequest, passwordEncoder));
+        UserEntity userToSave = usersMapper.mapToUserEntity(createUserRequest, passwordEncoder);
+        usersService.checkIfUsernameIsAlreadyUsed(userToSave);
+        UserEntity savedUser = usersService.addUser(userToSave);
+        return usersService.createUserURI(savedUser);
     }
 
     public UserDetailsDto updateUser(String username, UserDetailsDto userDetailsDto) {

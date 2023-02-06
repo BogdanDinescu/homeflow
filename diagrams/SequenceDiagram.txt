@@ -21,23 +21,21 @@ sequenceDiagram
         UsersFacade ->> +UsersMapper: mapToUserEntity
         UsersMapper -->> -UsersFacade:
 
-        UsersFacade ->> +UsersService: checkIfUsernameIsAlreadyUsed
-                UsersService ->> +UsersRepository: existsByUsername
+        UsersFacade ->> UsersService: checkIfUsernameIsAlreadyUsed
+        UsersService ->> +UsersRepository: existsByUsername
         UsersRepository -->> -UsersService: Check result for username being taken or not
 
         break when the username is already in use
-            UsersService -->> UsersController: throws UserAlreadyExistsException
-            UsersController -->> frontend: Send bad request response with details
+            UsersService -->> frontend: throw UserAlreadyExistsException and send bad request response with appropriate details
         end
 
         UsersFacade ->> +UsersService: addUser
-
         UsersService ->> +UsersRepository: save
-        UsersRepository -->> -UsersService: Returns saved user
-        UsersService -->> -UsersFacade:
+        UsersRepository -->> -UsersService: returns saved user
+        UsersService -->> -UsersFacade: saved user data is returned
         UsersFacade ->> +UsersService: createUserURI
-        UsersService -->> -UsersFacade: Returns URI for the saved user
-        UsersFacade -->> -UsersController: Returns created URI
+        UsersService -->> -UsersFacade: URI for the saved user is returned
+        UsersFacade -->> -UsersController: created URI is returned
         UsersController -->> frontend: Send success response
 
     end
