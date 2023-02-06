@@ -1,7 +1,7 @@
 package com.fmi.homeflow.service.family;
 
 import com.fmi.homeflow.exception.InvalidDataException;
-import com.fmi.homeflow.exception.user_exception.FamilyNotFoundException;
+import com.fmi.homeflow.exception.custom.FamilyNotFoundException;
 import com.fmi.homeflow.model.family.FamilyEntity;
 import com.fmi.homeflow.model.user.UserEntity;
 import com.fmi.homeflow.repository.FamilyRepository;

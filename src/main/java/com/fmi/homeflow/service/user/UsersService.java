@@ -1,7 +1,7 @@
 package com.fmi.homeflow.service.user;
 
-import com.fmi.homeflow.exception.user_exception.UserAlreadyExistsException;
-import com.fmi.homeflow.exception.user_exception.UserNotFoundException;
+import com.fmi.homeflow.exception.custom.UserAlreadyExistsException;
+import com.fmi.homeflow.exception.custom.UserNotFoundException;
 import com.fmi.homeflow.model.dto.user.UserDetailsDto;
 import com.fmi.homeflow.model.user.UserEntity;
 import com.fmi.homeflow.repository.UsersRepository;

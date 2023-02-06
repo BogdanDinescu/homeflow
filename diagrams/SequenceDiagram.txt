@@ -36,6 +36,6 @@ sequenceDiagram
         UsersFacade ->> +UsersService: createUserURI
         UsersService -->> -UsersFacade: URI for the saved user is returned
         UsersFacade -->> -UsersController: created URI is returned
-        UsersController -->> frontend: Send success response
+        UsersController -->> frontend: Send success response 201
 
     end

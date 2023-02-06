@@ -1,7 +1,7 @@
 package com.fmi.homeflow.service.task;
 
 import com.fmi.homeflow.exception.InvalidDataException;
-import com.fmi.homeflow.exception.user_exception.TaskNotFoundException;
+import com.fmi.homeflow.exception.custom.TaskNotFoundException;
 import com.fmi.homeflow.model.family.FamilyEntity;
 import com.fmi.homeflow.model.task.TaskEntity;
 import com.fmi.homeflow.model.user.UserEntity;
