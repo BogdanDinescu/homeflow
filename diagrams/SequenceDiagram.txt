@@ -1,27 +1,43 @@
 sequenceDiagram
 
-    actor userEntity
-    participant UserController
-    participant UserFacade
-    participant UserService
-    participant UserRepository
+    actor frontend
+    participant UsersController
+    participant UsersFacade
+    participant UsersService
+    participant UsersRepository
+    participant UsersMapper
 
-    userEntity ->> UserController: addUser
-    UserController ->> UserController: ValidateRequestBody
-    UserController ->> UserFacade: addUser
-    UserFacade ->> +UserService: addUser
-    UserService ->> +UserRepository: existsByUsername
-    UserRepository -->> -UserService: Check result for username being taken or not
+    note right of frontend: POST /api/users
+    frontend ->> UsersController: addUser
+    UsersController ->> UsersController: ValidateRequestBody
 
-    break when the result is true
-        UserService -->> UserController: throwUserAlreadyExistsException
-        UserController -->> userEntity: Show failure cause
+    alt there are invalid fields
+
+        UsersController -->> frontend: Send bad request response with details
+
+    else all fields are valid
+
+        UsersController ->> +UsersFacade: addUser
+        UsersFacade ->> +UsersMapper: mapToUserEntity
+        UsersMapper -->> -UsersFacade:
+
+        UsersFacade ->> +UsersService: checkIfUsernameIsAlreadyUsed
+                UsersService ->> +UsersRepository: existsByUsername
+        UsersRepository -->> -UsersService: Check result for username being taken or not
+
+        break when the username is already in use
+            UsersService -->> UsersController: throws UserAlreadyExistsException
+            UsersController -->> frontend: Send bad request response with details
+        end
+
+        UsersFacade ->> +UsersService: addUser
+
+        UsersService ->> +UsersRepository: save
+        UsersRepository -->> -UsersService: Returns saved user
+        UsersService -->> -UsersFacade:
+        UsersFacade ->> +UsersService: createUserURI
+        UsersService -->> -UsersFacade: Returns URI for the saved user
+        UsersFacade -->> -UsersController: Returns created URI
+        UsersController -->> frontend: Send success response
+
     end
-
-    UserService ->> +UserRepository: saveUserData
-    UserRepository -->> -UserService: Returns saved userEntity
-    UserService -->> -UserFacade:
-    UserFacade ->> +UserService: createUserURI
-    UserService -->> -UserFacade: Returns URI of the saved userEntity
-    UserFacade -->> UserController:
-    UserController -->> userEntity: Show success message
