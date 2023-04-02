@@ -16,7 +16,7 @@ services:
     ports:
       - '8080:8080'
     networks:
-      pc-network:
+      private-network:
 
   db:
     image: 'postgres:13.1-alpine'
@@ -25,7 +25,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=pR01#ctj(v*d@!ddA
     networks:
-      pc-network:
+      private-network:
 
 networks:
-  pc-network:
+  private-network:
