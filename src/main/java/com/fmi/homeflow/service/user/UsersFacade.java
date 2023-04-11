@@ -1,6 +1,7 @@
 package com.fmi.homeflow.service.user;
 
 import com.fmi.homeflow.model.dto.user.CreateUserRequest;
+import com.fmi.homeflow.model.dto.user.GetUserResponse;
 import com.fmi.homeflow.model.dto.user.UserDetailsDto;
 import com.fmi.homeflow.model.user.UserEntity;
 import com.fmi.homeflow.transformer.UsersMapper;
@@ -20,8 +21,8 @@ public class UsersFacade {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserDetailsDto getUserByUsername(String username) {
-        return usersMapper.mapToUserDetailsDto(usersService.getUserByUsername(username));
+    public GetUserResponse getUserByUsername(String username) {
+        return usersMapper.mapToGetUserResponse(usersService.getUserByUsername(username));
     }
 
     public URI addUser(CreateUserRequest createUserRequest) {

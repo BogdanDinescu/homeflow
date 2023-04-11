@@ -1,5 +1,7 @@
 package com.fmi.homeflow.model.user;
 
 public enum Role {
-    MEMBER
+    UNASSIGNED_USER,
+    FAMILY_MEMBER,
+    FAMILY_OWNER
 }

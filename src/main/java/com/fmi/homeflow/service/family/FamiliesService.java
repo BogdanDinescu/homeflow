@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.UUID;
 
+import static com.fmi.homeflow.model.user.Role.FAMILY_MEMBER;
 import static com.fmi.homeflow.utility.PlatformConstants.GET_FAMILY_ROUTE;
 
 @Service
@@ -37,6 +38,7 @@ public class FamiliesService {
     public UserEntity addMemberToFamily(UserEntity userEntity, UUID familyId) {
         FamilyEntity familyEntity = getFamilyById(familyId);
         userEntity.setUserFamily(familyEntity);
+        userEntity.setRole(FAMILY_MEMBER);
         return userEntity;
     }
 

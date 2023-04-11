@@ -1,6 +1,7 @@
 package com.fmi.homeflow.controller;
 
 import com.fmi.homeflow.model.dto.user.CreateUserRequest;
+import com.fmi.homeflow.model.dto.user.GetUserResponse;
 import com.fmi.homeflow.model.dto.user.UserDetailsDto;
 import com.fmi.homeflow.service.user.UsersFacade;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ class UsersController {
     private final UsersFacade usersFacade;
 
     @GetMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDetailsDto> getUser(@PathVariable String username) {
+    public ResponseEntity<GetUserResponse> getUser(@PathVariable String username) {
         return ResponseEntity.ok(usersFacade.getUserByUsername(username));
     }
 
